@@ -42,6 +42,7 @@ function createOverlayWindow() {
     positioner.move('bottomRight')
 
     overlayWindow.setMenu(null)
+    overlayWindow.setIcon(path.join('images', 'tomato.ico'))
 
     overlayWindow.loadURL(url.format({
         pathname: path.join(__dirname, 'overlay.html'),
