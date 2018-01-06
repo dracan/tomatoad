@@ -1,5 +1,7 @@
 # Tomatoad
 
+![Tomato](https://raw.githubusercontent.com/dracan/tomatoad/master/src/images/tomato.png)
+
 Tomatoad is a cross-platform desktop [Pomodoro](https://en.wikipedia.org/wiki/Pomodoro_Technique) Timer.
 
 I've recently started using the [Pomodoro Technique](https://en.wikipedia.org/wiki/Pomodoro_Technique), and have noticed a huge difference in the amount of work I can get done, due to being a lot more focused and ignoring distractions, eg. emails, Slack messages, etc. Basically a promise to myself that for 25 minutes, everything other than what I'm working on will be ignored. It makes quite a big difference!
