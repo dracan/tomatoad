@@ -20,6 +20,11 @@ function createSystemTrayIcon() {
                 console.log("Clicked on settings")
             }
         }, {
+            label: '&About',
+            click: function () {
+                createAboutWindow()
+            }
+        }, {
             label: '&Exit',
             click: function () {
                 app.exit();
@@ -58,6 +63,34 @@ function createOverlayWindow() {
         // in an array if your app supports multi windows, this is the time
         // when you should delete the corresponding element.
         overlayWindow = null
+    })
+}
+
+let aboutWindow
+
+function createAboutWindow() {
+    aboutWindow = new BrowserWindow({ width: 470, height: 210 })
+
+    aboutWindow.setMenu(null)
+    aboutWindow.setIcon(path.join('images', 'tomato.ico'))
+
+    aboutWindow.loadURL(url.format({
+        pathname: path.join(__dirname, 'about', 'about.html'),
+        protocol: 'file:',
+        slashes: true,
+    }))
+
+    // Force hyperlinks to open in external browser
+    // (https://stackoverflow.com/questions/32402327/how-can-i-force-external-links-from-browser-window-to-open-in-a-default-browser)
+    aboutWindow.webContents.on('new-window', function(e, url) {
+        e.preventDefault();
+        require('electron').shell.openExternal(url);
+    });
+
+    // aboutWindow.webContents.openDevTools()
+
+    aboutWindow.on('closed', function () {
+        aboutWindow = null
     })
 }
 
