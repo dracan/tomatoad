@@ -46,7 +46,7 @@ function createOverlayWindow() {
     overlayWindow.setAlwaysOnTop(true, "floating");
 
     overlayWindow.loadURL(url.format({
-        pathname: path.join(__dirname, 'overlay.html'),
+        pathname: path.join(__dirname, 'overlay', 'overlay.html'),
         protocol: 'file:',
         slashes: true,
     }))
