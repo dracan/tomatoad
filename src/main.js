@@ -1,7 +1,9 @@
-const { app, BrowserWindow, Tray, Menu } = require('electron')
+const { app, BrowserWindow, Tray, Menu, ipcMain } = require('electron')
 
 const path = require('path')
 const url = require('url')
+
+const countdown = require('./countdown')
 
 function createSystemTrayIcon() {
     let trayIcon = new Tray(path.join('images', 'tomato.ico'))
@@ -55,4 +57,6 @@ function createOverlayWindow() {
 app.on('ready', function() {
     createSystemTrayIcon();
     createOverlayWindow();
+
+    countdown.init(count => overlayWindow.webContents.send('countdown', count));
 })
