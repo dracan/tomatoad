@@ -36,13 +36,14 @@ function createSystemTrayIcon() {
 let overlayWindow
 
 function createOverlayWindow() {
-    overlayWindow = new BrowserWindow({ width: 190, height: 125 })
+    overlayWindow = new BrowserWindow({ width: 175, height: 90, frame: false })
 
     var positioner = new Positioner(overlayWindow)
     positioner.move('bottomRight')
 
     overlayWindow.setMenu(null)
     overlayWindow.setIcon(path.join('images', 'tomato.ico'))
+    overlayWindow.setAlwaysOnTop(true, "floating");
 
     overlayWindow.loadURL(url.format({
         pathname: path.join(__dirname, 'overlay.html'),
