@@ -1,5 +1,7 @@
 const { app, BrowserWindow, Tray, Menu, ipcMain } = require('electron')
 
+var Positioner = require('electron-positioner')
+
 const path = require('path')
 const url = require('url')
 
@@ -35,6 +37,9 @@ let overlayWindow
 
 function createOverlayWindow() {
     overlayWindow = new BrowserWindow({ width: 190, height: 125 })
+
+    var positioner = new Positioner(overlayWindow)
+    positioner.move('bottomRight')
 
     overlayWindow.setMenu(null)
 
