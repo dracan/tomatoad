@@ -34,7 +34,7 @@ function createSystemTrayIcon() {
 let overlayWindow
 
 function createOverlayWindow() {
-    overlayWindow = new BrowserWindow({ width: 300, height: 200 })
+    overlayWindow = new BrowserWindow({ width: 190, height: 125 })
 
     overlayWindow.setMenu(null)
 
