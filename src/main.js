@@ -98,5 +98,5 @@ app.on('ready', function() {
     createSystemTrayIcon();
     createOverlayWindow();
 
-    countdown.init(count => overlayWindow.webContents.send('countdown', count));
+    countdown.init(count => overlayWindow && overlayWindow.webContents.send('countdown', count));
 })
