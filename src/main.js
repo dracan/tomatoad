@@ -39,6 +39,8 @@ function createSystemTrayIcon() {
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let overlayWindow
+let aboutWindow
+let dbContextWindow
 
 function createOverlayWindow() {
     overlayWindow = new BrowserWindow({ width: 175, height: 90, frame: false })
@@ -66,8 +68,6 @@ function createOverlayWindow() {
     })
 }
 
-let aboutWindow
-
 function createAboutWindow() {
     aboutWindow = new BrowserWindow({ width: 470, height: 210 })
 
@@ -94,9 +94,31 @@ function createAboutWindow() {
     })
 }
 
+// This creates a dummy window, so we can use IndexedDB in the render process (unfortunately doesn't work in the main process)
+function createDatabaseContextWindow() {
+    dbContextWindow = new BrowserWindow({ width: 0, height: 0, frame: false })
+
+    // For dev
+    //dbContextWindow.maximize()
+    //dbContextWindow.webContents.openDevTools()
+
+    dbContextWindow.loadURL(url.format({
+        pathname: path.join(__dirname, 'database', 'dbcontext.html'),
+        protocol: 'file:',
+        slashes: true,
+    }))
+
+    dbContextWindow.on('closed', function () {
+        dbContextWindow = null
+    })
+}
+
 app.on('ready', function() {
+    createDatabaseContextWindow();
     createSystemTrayIcon();
     createOverlayWindow();
 
-    countdown.init(count => overlayWindow && overlayWindow.webContents.send('countdown', count));
+    countdown.init(count => {
+        overlayWindow && overlayWindow.webContents.send('countdown', count)
+    });
 })
