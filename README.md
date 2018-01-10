@@ -29,3 +29,11 @@ By default, all your data will be stored locally. But there will be options to s
 ### Reports
 
 You'll be able to generate report in both HTML and PDF format.
+
+# Building from Source
+
+* Install [NodeJS](https://nodejs.org/)
+* Clone this repository
+* `cd src`
+* `npm install`
+* Finally `npm start` to run
