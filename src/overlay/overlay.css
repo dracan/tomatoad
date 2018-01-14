@@ -1,4 +1,11 @@
 #countdown {
-    font-size: 4em;
+    font-size: 2em;
     font-family: Arial, Helvetica, sans-serif;
+}
+
+body {
+    background-color: black;
+    color: white;
+    text-align: center;
+    overflow: hidden;
 }

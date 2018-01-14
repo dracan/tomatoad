@@ -43,7 +43,7 @@ let aboutWindow
 let dbContextWindow
 
 function createOverlayWindow() {
-    overlayWindow = new BrowserWindow({ width: 175, height: 90, frame: false })
+    overlayWindow = new BrowserWindow({ width: 100, height: 50, frame: false })
 
     var positioner = new Positioner(overlayWindow)
     positioner.move('bottomRight')
