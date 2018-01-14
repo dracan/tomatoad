@@ -50,7 +50,8 @@ function createOverlayWindow() {
 
     overlayWindow.setMenu(null)
     overlayWindow.setIcon(path.join('images', 'tomato.ico'))
-    overlayWindow.setAlwaysOnTop(true, "floating");
+    overlayWindow.setAlwaysOnTop(true, "floating")
+    overlayWindow.setResizable(false)
 
     overlayWindow.loadURL(url.format({
         pathname: path.join(__dirname, 'overlay', 'overlay.html'),
