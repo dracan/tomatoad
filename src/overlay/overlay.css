@@ -8,4 +8,5 @@ body {
     color: white;
     text-align: center;
     overflow: hidden;
+    cursor: default;
 }
