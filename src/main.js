@@ -8,7 +8,7 @@ const url = require('url')
 const countdown = require('./countdown')
 
 function createSystemTrayIcon() {
-    let trayIcon = new Tray(path.join('images', 'tomato.ico'))
+    let trayIcon = new Tray(path.join(__dirname, 'images', 'tomato.ico'))
 
     const trayMenuTemplate = [
         {
@@ -49,7 +49,7 @@ function createOverlayWindow() {
     positioner.move('bottomRight')
 
     overlayWindow.setMenu(null)
-    overlayWindow.setIcon(path.join('images', 'tomato.ico'))
+    overlayWindow.setIcon(path.join(__dirname, 'images', 'tomato.ico'))
     overlayWindow.setAlwaysOnTop(true, "floating")
     overlayWindow.setResizable(false)
     overlayWindow.setSkipTaskbar(true);
@@ -74,7 +74,7 @@ function createAboutWindow() {
     aboutWindow = new BrowserWindow({ width: 470, height: 210 })
 
     aboutWindow.setMenu(null)
-    aboutWindow.setIcon(path.join('images', 'tomato.ico'))
+    aboutWindow.setIcon(path.join(__dirname, 'images', 'tomato.ico'))
 
     aboutWindow.loadURL(url.format({
         pathname: path.join(__dirname, 'about', 'about.html'),

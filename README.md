@@ -34,6 +34,11 @@ You'll be able to generate report in both HTML and PDF format.
 
 * Install [NodeJS](https://nodejs.org/)
 * Clone this repository
-* `cd src`
 * `npm install`
 * Finally `npm start` to run
+
+# Building installer
+
+* Install [NodeJS](https://nodejs.org/)
+* Clone this repository
+* Run `cake.ps1`
