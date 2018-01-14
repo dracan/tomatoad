@@ -52,6 +52,7 @@ function createOverlayWindow() {
     overlayWindow.setIcon(path.join('images', 'tomato.ico'))
     overlayWindow.setAlwaysOnTop(true, "floating")
     overlayWindow.setResizable(false)
+    overlayWindow.setSkipTaskbar(true);
 
     overlayWindow.loadURL(url.format({
         pathname: path.join(__dirname, 'overlay', 'overlay.html'),
@@ -98,6 +99,9 @@ function createAboutWindow() {
 // This creates a dummy window, so we can use IndexedDB in the render process (unfortunately doesn't work in the main process)
 function createDatabaseContextWindow() {
     dbContextWindow = new BrowserWindow({ width: 0, height: 0, frame: false })
+
+    dbContextWindow.hide();
+    dbContextWindow.setSkipTaskbar(true);
 
     // For dev
     //dbContextWindow.maximize()
