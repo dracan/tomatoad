@@ -7,8 +7,15 @@ const url = require('url')
 
 const countdown = require('./countdown')
 
+// Keep a global reference of the window object, if you don't, the window will
+// be closed automatically when the JavaScript object is garbage collected.
+let trayIcon
+let overlayWindow
+let aboutWindow
+let dbContextWindow
+
 function createSystemTrayIcon() {
-    let trayIcon = new Tray(path.join(__dirname, 'images', 'tomato.ico'))
+    trayIcon = new Tray(path.join(__dirname, 'images', 'tomato.ico'))
 
     const trayMenuTemplate = [
         {
@@ -35,12 +42,6 @@ function createSystemTrayIcon() {
     let trayMenu = Menu.buildFromTemplate(trayMenuTemplate)
     trayIcon.setContextMenu(trayMenu)
 }
-
-// Keep a global reference of the window object, if you don't, the window will
-// be closed automatically when the JavaScript object is garbage collected.
-let overlayWindow
-let aboutWindow
-let dbContextWindow
 
 function createOverlayWindow() {
     overlayWindow = new BrowserWindow({ width: 100, height: 50, frame: false })
