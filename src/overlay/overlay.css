@@ -10,3 +10,16 @@ body {
     overflow: hidden;
     cursor: default;
 }
+
+.container {
+    display: flex;
+    align-items: center;
+}
+
+.col {
+    flex: 1;
+}
+
+.overlay-button {
+    color: grey;
+}

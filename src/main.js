@@ -44,7 +44,7 @@ function createSystemTrayIcon() {
 }
 
 function createOverlayWindow() {
-    overlayWindow = new BrowserWindow({ width: 100, height: 50, frame: false })
+    overlayWindow = new BrowserWindow({ width: 120, height: 50, frame: false })
 
     var positioner = new Positioner(overlayWindow)
     positioner.move('bottomRight')
@@ -61,7 +61,9 @@ function createOverlayWindow() {
         slashes: true,
     }))
 
-    // overlayWindow.webContents.openDevTools()
+    // For dev
+    //overlayWindow.maximize()
+    //overlayWindow.webContents.openDevTools()
 
     overlayWindow.on('closed', function () {
         // Dereference the window object, usually you would store windows
@@ -90,7 +92,9 @@ function createAboutWindow() {
         require('electron').shell.openExternal(url);
     });
 
-    // aboutWindow.webContents.openDevTools()
+    // For dev
+    //aboutWindow.maximize()
+    //aboutWindow.webContents.openDevTools()
 
     aboutWindow.on('closed', function () {
         aboutWindow = null
@@ -123,8 +127,16 @@ app.on('ready', function() {
     createDatabaseContextWindow();
     createSystemTrayIcon();
     createOverlayWindow();
+})
 
+ipcMain.on('pomodoro-start', (evt) => {
     countdown.init(count => {
         overlayWindow && overlayWindow.webContents.send('countdown', count)
     });
+
+    overlayWindow && overlayWindow.webContents.send('pomodoro-start')
+})
+
+ipcMain.on('pomodoro-stop', (evt) => {
+    countdown.stop()
 })

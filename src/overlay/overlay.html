@@ -4,9 +4,15 @@
     <meta charset="UTF-8">
     <title>Tomatoad</title>
     <link rel="stylesheet" href="overlay.css" />
+    <link rel="stylesheet" href="..\node_modules\font-awesome\css\font-awesome.min.css" />
 </head>
 <body>
-    <div id="countdown"></div>
+    <div class="container">
+        <div class="col" id="countdown">25:00</div>
+        <div class="col">
+            <i id="overlay-button-start-stop" class="fa fa-play overlay-button" onclick="onClickStartStop()"></i>
+        </div>
+    </div>
 
     <script>
         require('./overlay.js')
