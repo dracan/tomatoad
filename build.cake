@@ -46,8 +46,45 @@ Task("ElectronBuild")
         });
     });
 
+Task("ChocolateyUpdateVersionNumbers")
+    .IsDependentOn("CalculateVersionNumber")
+    .Does(() => {
+        DoInDirectory(@"chocolatey", () => {
+            TransformConfig("tomatoad.nuspec", "tomatoad.nuspec", new TransformationCollection {
+                { "package/metadata/version", semVersion }
+            });
+
+            // Update chocolateyinstall.ps1
+            var content = $"Install-ChocolateyPackage 'Tomatoad' 'exe' '/S' 'https://github.com/dracan/tomatoad/releases/download/{semVersion}/Tomatoad.Setup.0.1.0.exe'";
+            System.IO.File.WriteAllText("tools/chocolateyinstall.ps1", content);
+        });
+    });
+
+Task("ChocolateyPack")
+    .IsDependentOn("ChocolateyUpdateVersionNumbers")
+    .Does(() => {
+        DoInDirectory(@"chocolatey", () => {
+            ChocolateyPack("tomatoad.nuspec", new ChocolateyPackSettings());
+        });
+    });
+
+Task("ChocolateyPush")
+    .IsDependentOn("ChocolateyPack")
+    .Does(() => {
+        DoInDirectory(@"chocolatey", () => {
+            var apiKey = EnvironmentVariable("TomatoadChocolateyApiKey");
+            if(apiKey == null) {
+                throw new NullReferenceException("TomatoadChocolateyApiKey environment variable must be set!");
+            }
+
+            ChocolateyPush($"tomatoad.{semVersion}.nupkg", new ChocolateyPushSettings {
+                ApiKey = apiKey,
+            });
+        });
+    });
+
 Task("UpdateGit")
-    .IsDependentOn("ElectronBuild")
+    .IsDependentOn("ChocolateyPush")
     .Does(() => {
         // Using StartProcess instead of Cake.Git because its GitCommit requires an explicit name and email.
         // As this isn't yet going through a build server - I don't this hardcoded.
