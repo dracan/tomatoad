@@ -1,3 +1,5 @@
 src/node_modules/
 src/dist/
 tools/
+tomatoad.*.nupkg
+!Chocolatey/tools/

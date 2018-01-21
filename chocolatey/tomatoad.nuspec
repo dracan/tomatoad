@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
+  <metadata>
+    <id>tomatoad</id>
+    <version>0.2.0</version>
+    <packageSourceUrl>https://github.com/dracan/tomatoad</packageSourceUrl>
+    <owners>Dan Clarke</owners>
+    <title>Tomatoad</title>
+    <authors>Dan Clarke</authors>
+    <projectUrl>https://github.com/dracan/tomatoad</projectUrl>
+    <!--<iconUrl>http://cdn.rawgit.com/__REPLACE_YOUR_REPO__/master/icons/tomatoad.png</iconUrl>-->
+    <licenseUrl>https://github.com/dracan/tomatoad/blob/master/LICENSE</licenseUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <!--<projectSourceUrl>Software Source Location - is the software FOSS somewhere? Link to it with this</projectSourceUrl>-->
+    <docsUrl>https://github.com/dracan/tomatoad</docsUrl>
+    <!--<mailingListUrl></mailingListUrl>-->
+    <bugTrackerUrl>https://github.com/dracan/tomatoad/issues</bugTrackerUrl>
+    <tags>tomatoad pomodoro</tags>
+    <summary>Cross-platform desktop Pomodoro Timer</summary>
+    <description>A cross platform desktop pomodoro timer written in Electron.</description>
+    <!-- <releaseNotes>__REPLACE_OR_REMOVE__MarkDown_Okay</releaseNotes> -->
+  </metadata>
+  <files>
+    <!-- this section controls what actually gets packaged into the Chocolatey package -->
+    <file src="tools\**" target="tools" />
+    <!--Building from Linux? You may need this instead: <file src="tools/**" target="tools" />-->
+  </files>
+</package>
