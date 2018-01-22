@@ -118,7 +118,7 @@ Task("GitHubRelease")
     });
 
 Task("Publish")
-    .IsDependentOn("ChocolateyPush")
+    // .IsDependentOn("ChocolateyPush")
     .IsDependentOn("GitHubRelease")
     .Does(() => {
     });
