@@ -98,6 +98,7 @@ Task("UpdateGit")
     });
 
 Task("GitHubRelease")
+    .IsDependentOn("CalculateVersionNumber")
     .IsDependentOn("ElectronBuild")
     .IsDependentOn("UpdateGit")
     .Does(() => {
@@ -115,6 +116,7 @@ Task("GitHubRelease")
 
         GitReleaseManagerAddAssets(gitHubUsername, gitHubPassword, "dracan", "tomatoad", semVersion, packageFile);
         GitReleaseManagerClose(gitHubUsername, gitHubPassword, "dracan", "tomatoad", semVersion);
+        GitReleaseManagerPublish(gitHubUsername, gitHubPassword, "dracan", "tomatoad", semVersion);
     });
 
 Task("Publish")
