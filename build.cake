@@ -4,6 +4,7 @@
 #addin "Cake.Npm"
 #tool "nuget:?package=GitVersion.CommandLine"
 #addin "nuget:?package=MagicChunks"
+#tool "nuget:?package=gitreleasemanager"
 
 var target = Argument("target", "Default");
 var configuration = Argument("configuration", "Release");
@@ -84,7 +85,8 @@ Task("ChocolateyPush")
     });
 
 Task("UpdateGit")
-    .IsDependentOn("ChocolateyPush")
+    .IsDependentOn("UpdateProjectJsonVersion")
+    .IsDependentOn("ChocolateyUpdateVersionNumbers")
     .Does(() => {
         // Using StartProcess instead of Cake.Git because its GitCommit requires an explicit name and email.
         // As this isn't yet going through a build server - I don't this hardcoded.
@@ -95,8 +97,34 @@ Task("UpdateGit")
         StartProcess("git", new ProcessSettings { Arguments = "push --tags" });
     });
 
-Task("Default")
+Task("GitHubRelease")
+    .IsDependentOn("ElectronBuild")
     .IsDependentOn("UpdateGit")
+    .Does(() => {
+        var gitHubUsername = EnvironmentVariable("TomatoadGitHubUsername");
+        var gitHubPassword = EnvironmentVariable("TomatoadGitHubPassword");
+
+        GitReleaseManagerCreate(gitHubUsername, gitHubPassword, "dracan", "tomatoad", new GitReleaseManagerCreateSettings {
+                Milestone       = semVersion,
+                Name            = semVersion,
+                Prerelease      = true,
+                TargetCommitish = "master"
+            });
+
+        var packageFile = File($"src/dist/Tomatoad Setup {semVersion}.exe");
+
+        GitReleaseManagerAddAssets(gitHubUsername, gitHubPassword, "dracan", "tomatoad", semVersion, packageFile);
+        GitReleaseManagerClose(gitHubUsername, gitHubPassword, "dracan", "tomatoad", semVersion);
+    });
+
+Task("Publish")
+    .IsDependentOn("ChocolateyPush")
+    .IsDependentOn("GitHubRelease")
+    .Does(() => {
+    });
+
+Task("Default")
+    .IsDependentOn("Publish")
     .Does(() => {
     });
 
