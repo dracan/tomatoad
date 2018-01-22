@@ -1,58 +1,58 @@
 {
-    "name": "Tomatoad",
-    "version": "0.1.0",
-    "description": "Pomodora Desktop Timer",
-    "main": "main.js",
-    "scripts": {
-        "start": "electron .",
-        "postinstall": "install-app-deps",
-        "pack": "build --dir",
-        "dist": "build"
-    },
-    "repository": "https://github.com/dracan/tomatoad",
-    "keywords": [
-        "Pomodoro",
-        "Electron"
-    ],
-    "author": "Dan Clarke",
-    "license": "MIT",
-    "devDependencies": {
-        "electron": "~1.7.8",
-        "electron-builder": "^19.52.1"
-    },
-    "dependencies": {
-        "electron-positioner": "^3.0.0",
-        "font-awesome": "^4.7.0",
-        "moment": "^2.20.1",
-        "pouchdb": "^6.4.1",
-        "pouchdb-adapter-idb": "^6.4.1"
-    },
-    "build": {
-        "appId": "com.electron.tomatoad",
-        "productName": "Tomatoad",
-        "dmg": {
-            "contents": [
-                {
-                    "x": 110,
-                    "y": 150
-                },
-                {
-                    "x": 240,
-                    "y": 150,
-                    "type": "link",
-                    "path": "/Applications"
-                }
-            ]
+  "name": "Tomatoad",
+  "version": "0.1.1",
+  "description": "Pomodora Desktop Timer",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "postinstall": "install-app-deps",
+    "pack": "build --dir",
+    "dist": "build"
+  },
+  "repository": "https://github.com/dracan/tomatoad",
+  "keywords": [
+    "Pomodoro",
+    "Electron"
+  ],
+  "author": "Dan Clarke",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "~1.7.8",
+    "electron-builder": "^19.52.1"
+  },
+  "dependencies": {
+    "electron-positioner": "^3.0.0",
+    "font-awesome": "^4.7.0",
+    "moment": "^2.20.1",
+    "pouchdb": "^6.4.1",
+    "pouchdb-adapter-idb": "^6.4.1"
+  },
+  "build": {
+    "appId": "com.electron.tomatoad",
+    "productName": "Tomatoad",
+    "dmg": {
+      "contents": [
+        {
+          "x": 110,
+          "y": 150
         },
-        "linux": {
-            "target": [
-                "AppImage",
-                "deb"
-            ]
-        },
-        "win": {
-            "target": "NSIS",
-            "icon": "build/icon.ico"
+        {
+          "x": 240,
+          "y": 150,
+          "type": "link",
+          "path": "/Applications"
         }
+      ]
+    },
+    "linux": {
+      "target": [
+        "AppImage",
+        "deb"
+      ]
+    },
+    "win": {
+      "target": "NSIS",
+      "icon": "build/icon.ico"
     }
+  }
 }
