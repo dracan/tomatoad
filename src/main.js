@@ -1,4 +1,4 @@
-const { app, BrowserWindow, Tray, Menu, ipcMain } = require('electron')
+const { app, BrowserWindow, Tray, Menu, ipcMain, shell } = require('electron')
 
 var Positioner = require('electron-positioner')
 
@@ -33,6 +33,11 @@ function createSystemTrayIcon() {
             label: '&About',
             click: function () {
                 createAboutWindow()
+            }
+        }, {
+            label: 'Report bug or suggest a feature',
+            click: function () {
+                shell.openExternal('https://github.com/dracan/tomatoad/issues')
             }
         }, {
             label: '&Exit',
