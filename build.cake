@@ -18,6 +18,19 @@ Task("CalculateVersionNumber")
         Information("Calculated Semantic Version: {0}", semVersion);
     });
 
+Task("UpdateSettingsJsonVersion")
+    .IsDependentOn("CalculateVersionNumber")
+    .WithCriteria(() => !isLocalBuild)
+    .Does(() => {
+        DoInDirectory(@"src", () => {
+            Information("Updating settings.json version to {0}", semVersion);
+
+            TransformConfig("settings.json", "settings.json", new TransformationCollection {
+                { "version", semVersion }
+            });
+        });
+    });
+
 Task("UpdateProjectJsonVersion")
     .IsDependentOn("CalculateVersionNumber")
     .WithCriteria(() => !isLocalBuild)
@@ -41,6 +54,7 @@ Task("NpmInstall")
 Task("ElectronBuild")
     .IsDependentOn("NpmInstall")
     .IsDependentOn("UpdateProjectJsonVersion")
+    .IsDependentOn("UpdateSettingsJsonVersion")
     .Does(() => {
         DoInDirectory(@"src", () => {
             NpmRunScript("dist");

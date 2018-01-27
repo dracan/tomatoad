@@ -77,7 +77,7 @@ function createOverlayWindow() {
 }
 
 function createAboutWindow() {
-    aboutWindow = new BrowserWindow({ width: 470, height: 210 })
+    aboutWindow = new BrowserWindow({ width: 470, height: 280 })
 
     aboutWindow.setMenu(null)
     aboutWindow.setIcon(path.join(__dirname, 'images', 'tomato.ico'))
