@@ -14,28 +14,32 @@ const getTimeString = (seconds) => {
 }
 
 // Respond to events from Main
-ipc.on('pomodoro-start', (evt) => { onStartPomodoro() })
-ipc.on('pomodoro-stop', (evt) => { onStopPomodoro() })
+ipc.on('pomodoro-start', (evt) => { onStart() })
+ipc.on('pomodoro-stop', (evt) => { onStop() })
+ipc.on('pomodoro-complete', (evt) => { onStop() })
+ipc.on('break-start', (evt) => { onStart() })
+ipc.on('break-stop', (evt) => { onStop() })
+ipc.on('break-complete', (evt) => { onStop() })
 ipc.on('countdown', (evt, count) => { document.getElementById('countdown').innerHTML = getTimeString(count); })
 
 onClickStartStop = function () {
     if(pomodoroRunning) {
-        onStopPomodoro()
+        onStop()
         ipc.send("pomodoro-stop")
     } else {
-        onStartPomodoro()
+        onStart()
         ipc.send("pomodoro-start")
     }
 }
 
-function onStartPomodoro() {
+function onStart() {
     const el = document.getElementById('overlay-button-start-stop')
     el.classList.remove("fa-play")
     el.classList.add("fa-close")
     pomodoroRunning = true
 }
 
-function onStopPomodoro() {
+function onStop() {
     const el = document.getElementById('overlay-button-start-stop')
     el.classList.remove("fa-close")
     el.classList.add("fa-play")

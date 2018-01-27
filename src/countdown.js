@@ -1,21 +1,22 @@
 let timer
 
 module.exports = {
-    init: function (callback) {
-        let seconds = 1500 // 25 minutes
+    init: function (initialNumSeconds, intervalCallback, completionCallback) {
+        let seconds = initialNumSeconds
 
         if(timer) {
             clearInterval(timer)
             timer = null
         }
 
-        callback(seconds--)
+        intervalCallback(seconds--)
 
         timer = setInterval(_ => {
-            callback(seconds--)
+            intervalCallback(seconds--)
 
             if (seconds === -1) {
                 clearInterval(timer)
+                completionCallback()
             }
         }, 1000)
     },

@@ -7,6 +7,9 @@ const url = require('url')
 
 const countdown = require('./countdown')
 
+let pomodoroLengthSeconds = 1500 // 25 minutes
+let breakLengthSeconds = 300 // 5 minutes
+
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let trayIcon
@@ -129,12 +132,34 @@ app.on('ready', function() {
     createOverlayWindow();
 })
 
+broadcastEvent = function(eventName, arg) {
+    overlayWindow && overlayWindow.webContents.send(eventName, arg)
+    dbContextWindow && dbContextWindow.webContents.send(eventName, arg)
+}
+
 ipcMain.on('pomodoro-start', (evt) => {
-    countdown.init(count => {
-        overlayWindow && overlayWindow.webContents.send('countdown', count)
+    countdown.init(pomodoroLengthSeconds, count => {
+        broadcastEvent("countdown", count)
+    }, () => {
+        setTimeout(_ => {
+            broadcastEvent('pomodoro-complete')
+            ipcMain.emit('break-start')
+        }, 1000);
     });
 
-    overlayWindow && overlayWindow.webContents.send('pomodoro-start')
+    broadcastEvent('pomodoro-start')
+})
+
+ipcMain.on('break-start', (evt) => {
+    countdown.init(breakLengthSeconds, count => {
+        broadcastEvent("countdown", count)
+    }, () => {
+        setTimeout(_ => {
+            broadcastEvent('break-complete')
+        }, 1000);
+    });
+
+    broadcastEvent('break-start')
 })
 
 ipcMain.on('pomodoro-stop', (evt) => {
