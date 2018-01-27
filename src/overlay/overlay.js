@@ -1,7 +1,10 @@
 const electron = require('electron')
 const moment = require('moment')
+const path = require('path')
 
 const ipc = electron.ipcRenderer
+
+var audio = new Audio(path.join(__dirname, '..', 'sounds', 'timer.wav'));
 
 let pomodoroRunning = false
 
@@ -16,10 +19,10 @@ const getTimeString = (seconds) => {
 // Respond to events from Main
 ipc.on('pomodoro-start', (evt) => { onStart() })
 ipc.on('pomodoro-stop', (evt) => { onStop() })
-ipc.on('pomodoro-complete', (evt) => { onStop() })
+ipc.on('pomodoro-complete', (evt) => { onComplete() })
 ipc.on('break-start', (evt) => { onStart() })
 ipc.on('break-stop', (evt) => { onStop() })
-ipc.on('break-complete', (evt) => { onStop() })
+ipc.on('break-complete', (evt) => { onComplete() })
 ipc.on('countdown', (evt, count) => { document.getElementById('countdown').innerHTML = getTimeString(count); })
 
 onClickStartStop = function () {
@@ -44,4 +47,9 @@ function onStop() {
     el.classList.remove("fa-close")
     el.classList.add("fa-play")
     pomodoroRunning = false
+}
+
+function onComplete() {
+    audio.play();
+    onStop()
 }

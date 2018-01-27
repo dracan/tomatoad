@@ -7,7 +7,7 @@ const url = require('url')
 
 const countdown = require('./countdown')
 
-let pomodoroLengthSeconds = 1500 // 25 minutes
+let pomodoroLengthSeconds = 5 // 25 minutes
 let breakLengthSeconds = 300 // 5 minutes
 
 // Keep a global reference of the window object, if you don't, the window will
@@ -141,8 +141,9 @@ ipcMain.on('pomodoro-start', (evt) => {
     countdown.init(pomodoroLengthSeconds, count => {
         broadcastEvent("countdown", count)
     }, () => {
+        broadcastEvent('pomodoro-complete')
+
         setTimeout(_ => {
-            broadcastEvent('pomodoro-complete')
             ipcMain.emit('break-start')
         }, 1000);
     });
@@ -154,9 +155,7 @@ ipcMain.on('break-start', (evt) => {
     countdown.init(breakLengthSeconds, count => {
         broadcastEvent("countdown", count)
     }, () => {
-        setTimeout(_ => {
-            broadcastEvent('break-complete')
-        }, 1000);
+        broadcastEvent('break-complete')
     });
 
     broadcastEvent('break-start')
