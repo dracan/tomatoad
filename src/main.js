@@ -6,8 +6,9 @@ const path = require('path')
 const url = require('url')
 
 const countdown = require('./countdown')
+const slack = require('./slack/slack.main')
 
-let pomodoroLengthSeconds = 5 // 25 minutes
+let pomodoroLengthSeconds = 1500 // 25 minutes
 let breakLengthSeconds = 300 // 5 minutes
 
 // Keep a global reference of the window object, if you don't, the window will
@@ -33,6 +34,11 @@ function createSystemTrayIcon() {
             label: '&About',
             click: function () {
                 createAboutWindow()
+            }
+        }, {
+            label: '&Slack Integration',
+            click: function () {
+                createSlackWindow()
             }
         }, {
             label: 'Report bug or suggest a feature',
@@ -109,6 +115,33 @@ function createAboutWindow() {
     })
 }
 
+function createSlackWindow() {
+    slackWindow = new BrowserWindow({ width: 500, height: 400 })
+
+    slackWindow.setMenu(null)
+    slackWindow.setIcon(path.join(__dirname, 'images', 'tomato.ico'))
+
+    slackWindow.loadURL(url.format({
+        pathname: path.join(__dirname, 'slack', 'slack.html'),
+        protocol: 'file:',
+        slashes: true,
+    }))
+
+    slackWindow.webContents.on('did-get-response-details', function (event, status, newURL, originalURL, httpResponseCode, requestMethod, referrer, headers, resourceType) {
+        if(newURL.indexOf("https://tomatoadauth.azurewebsites.net/api/slackauth") !== -1) {
+            slack.setAuthCode(headers['x-auth-code']);
+        }
+    });
+
+    // For dev
+    // slackWindow.maximize()
+    // slackWindow.webContents.openDevTools()
+
+    slackWindow.on('closed', function () {
+        slackWindow = null
+    })
+}
+
 // This creates a dummy window, so we can use IndexedDB in the render process (unfortunately doesn't work in the main process)
 function createDatabaseContextWindow() {
     dbContextWindow = new BrowserWindow({ width: 0, height: 0, frame: false })
@@ -147,6 +180,8 @@ ipcMain.on('pomodoro-start', (evt) => {
         broadcastEvent("countdown", count)
     }, () => {
         broadcastEvent('pomodoro-complete')
+        slack.setStatus("", "")
+        slack.setDoNotDisturb(0)
 
         setTimeout(_ => {
             ipcMain.emit('break-start')
@@ -154,6 +189,8 @@ ipcMain.on('pomodoro-start', (evt) => {
     });
 
     broadcastEvent('pomodoro-start')
+    slack.setStatus("25 minutes", ":tomato:")
+    slack.setDoNotDisturb(25)
 })
 
 ipcMain.on('break-start', (evt) => {
@@ -168,4 +205,6 @@ ipcMain.on('break-start', (evt) => {
 
 ipcMain.on('pomodoro-stop', (evt) => {
     countdown.stop()
+    slack.setStatus("", "")
+    slack.setDoNotDisturb(0)
 })
