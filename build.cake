@@ -86,6 +86,7 @@ Task("ChocolateyPack")
 
 Task("ChocolateyPush")
     .IsDependentOn("ChocolateyPack")
+    .IsDependentOn("GitHubRelease")
     .Does(() => {
         DoInDirectory(@"chocolatey", () => {
             var apiKey = EnvironmentVariable("TomatoadChocolateyApiKey");
@@ -136,7 +137,6 @@ Task("GitHubRelease")
 
 Task("Publish")
     .IsDependentOn("ChocolateyPush")
-    .IsDependentOn("GitHubRelease")
     .Does(() => {
     });
 
