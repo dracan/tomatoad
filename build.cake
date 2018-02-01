@@ -70,7 +70,7 @@ Task("ChocolateyUpdateVersionNumbers")
             });
 
             // Update chocolateyinstall.ps1
-            var content = $"Install-ChocolateyPackage 'Tomatoad' 'exe' '/S' 'https://github.com/dracan/tomatoad/releases/download/{semVersion}/Tomatoad.Setup.0.1.0.exe'";
+            var content = $"Install-ChocolateyPackage 'Tomatoad' 'exe' '/S' 'https://github.com/dracan/tomatoad/releases/download/{semVersion}/Tomatoad.Setup.{semVersion}.exe'";
             System.IO.File.WriteAllText("tools/chocolateyinstall.ps1", content);
         });
     });
