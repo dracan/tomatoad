@@ -76,6 +76,7 @@ Task("ChocolateyUpdateVersionNumbers")
     });
 
 Task("ChocolateyPack")
+    .IsDependentOn("ElectronBuild")
     .IsDependentOn("ChocolateyUpdateVersionNumbers")
     .Does(() => {
         DoInDirectory(@"chocolatey", () => {
@@ -134,7 +135,7 @@ Task("GitHubRelease")
     });
 
 Task("Publish")
-    // .IsDependentOn("ChocolateyPush")
+    .IsDependentOn("ChocolateyPush")
     .IsDependentOn("GitHubRelease")
     .Does(() => {
     });
