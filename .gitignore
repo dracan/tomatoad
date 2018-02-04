@@ -3,3 +3,4 @@ src/dist/
 tools/
 tomatoad.*.nupkg
 !Chocolatey/tools/
+src/db/
