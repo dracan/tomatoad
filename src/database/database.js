@@ -1,8 +1,10 @@
-var Datastore = require('nedb')
+const Datastore = require('nedb')
+const path = require('path')
 
-const dbSlack = new Datastore({ filename: __dirname + '/../db/slack.json', autoload: true });
+const dbPath = path.dirname(process.execPath) + '/db/db.json'
+const db = new Datastore({ filename: dbPath, autoload: true });
 
-dbSlack.persistence.compactDatafile()
+db.persistence.compactDatafile()
 
 module.exports = {
     saveNewPomodoro: function (callback) {
@@ -17,18 +19,5 @@ module.exports = {
             // newDoc has no key called notToBeSaved since its value was undefined
         });
         */
-    },
-
-    saveSlackAuthTokens(authTokens) {
-        dbSlack.update({
-            _id: 'slackAuthTokens'
-        }, { _id: 'slackAuthTokens', data: authTokens }, { upsert: true }, function (err, numReplaced, upsert) {
-        });
-    },
-
-    loadSlackAuthTokens(callback) {
-        dbSlack.find({ _id: 'slackAuthTokens' }, function (err, docs) {
-            callback(docs.length == 0 ? {} : docs[0].data)
-        });
     }
 }

@@ -23,6 +23,7 @@
   "dependencies": {
     "electron-positioner": "^3.0.0",
     "font-awesome": "^4.7.0",
+    "keytar": "^4.1.0",
     "moment": "^2.20.1",
     "nedb": "^1.8.0",
     "node-fetch": "^1.7.3"

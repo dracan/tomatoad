@@ -1,19 +1,30 @@
 const fetch = require('node-fetch')
-const database = require('../database/database')
+const keytar = require('keytar')
 
 let _authTokens = {}
 
 module.exports = {
     loadAuthTokens: function() {
-        database.loadSlackAuthTokens(function(authTokens) {
-            _authTokens = authTokens
+        keytar.findCredentials("Tomatoad_Slack").then(creds => {
+            _authTokens = {}
+
+            creds.forEach(cred => {
+                // Note that I'm re-looking up the password using getPassword rather than just
+                // using the cred.password field because of this bug ...
+                // https://github.com/atom/node-keytar/issues/96
+                // Once released, I can remove the getPassword call and just use cred.password.
+
+                keytar.getPassword("Tomatoad_Slack", cred.account).then(pw => {
+                    _authTokens[cred.account] = pw;
+                })
+            });
         })
     },
 
     setAuthCode: function (teamName, authToken) {
         _authTokens[teamName] = authToken;
 
-        database.saveSlackAuthTokens(_authTokens)
+        keytar.setPassword("Tomatoad_Slack", teamName, authToken)
     },
 
     setStatus: function (text, emoji) {
