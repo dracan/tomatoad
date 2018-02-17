@@ -11,6 +11,8 @@ const slack = require('./slack/slack.main')
 let pomodoroLengthSeconds = 1500 // 25 minutes
 let breakLengthSeconds = 300 // 5 minutes
 
+const isDevelopment = process.env.NODE_ENV !== 'production'
+
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let trayIcon
@@ -18,7 +20,7 @@ let overlayWindow
 let aboutWindow
 
 function createSystemTrayIcon() {
-    trayIcon = new Tray(path.join(__dirname, 'images', 'tomato.ico'))
+    trayIcon = new Tray(path.join(__static, 'tomato.ico'))
 
     const trayMenuTemplate = [
         {
@@ -63,20 +65,24 @@ function createOverlayWindow() {
     positioner.move('bottomRight')
 
     overlayWindow.setMenu(null)
-    overlayWindow.setIcon(path.join(__dirname, 'images', 'tomato.ico'))
+    overlayWindow.setIcon(path.join(__static, 'tomato.ico'))
     overlayWindow.setAlwaysOnTop(true, "floating")
     overlayWindow.setResizable(false)
     overlayWindow.setSkipTaskbar(true);
 
-    overlayWindow.loadURL(url.format({
-        pathname: path.join(__dirname, 'overlay', 'overlay.html'),
-        protocol: 'file:',
-        slashes: true,
-    }))
+    if(isDevelopment) {
+        overlayWindow.loadURL(`http://localhost:${process.env.ELECTRON_WEBPACK_WDS_PORT}`);
+    } else {
+        overlayWindow.loadURL(url.format({
+            pathname: path.join(__dirname, 'overlay', 'overlay.html'),
+            protocol: 'file:',
+            slashes: true,
+        }))
+    }
 
     // For dev
-    //overlayWindow.maximize()
-    //overlayWindow.webContents.openDevTools()
+    overlayWindow.maximize()
+    overlayWindow.webContents.openDevTools()
 
     overlayWindow.on('closed', function () {
         // Dereference the window object, usually you would store windows
@@ -90,7 +96,7 @@ function createAboutWindow() {
     aboutWindow = new BrowserWindow({ width: 470, height: 280 })
 
     aboutWindow.setMenu(null)
-    aboutWindow.setIcon(path.join(__dirname, 'images', 'tomato.ico'))
+    aboutWindow.setIcon(path.join(__static, 'tomato.ico'))
 
     aboutWindow.loadURL(url.format({
         pathname: path.join(__dirname, 'about', 'about.html'),

@@ -4,10 +4,9 @@
   "description": "Pomodora Desktop Timer",
   "main": "main.js",
   "scripts": {
-    "start": "electron .",
-    "postinstall": "install-app-deps",
-    "pack": "build --dir",
-    "dist": "build"
+    "dev": "electron-webpack dev",
+    "compile": "electron-webpack",
+    "dist": "electron-builder"
   },
   "repository": "https://github.com/dracan/tomatoad",
   "keywords": [
@@ -17,8 +16,12 @@
   "author": "Dan Clarke",
   "license": "MIT",
   "devDependencies": {
-    "electron": "^1.7.11",
-    "electron-builder": "^19.55.1"
+    "electron": "^1.8.2",
+    "electron-builder": "^20.0.5",
+    "electron-webpack": "1.12.1",
+    "vue": "^2.5.13",
+    "webpack": "^3.10.0",
+    "webpack-sources": "1.0.1"
   },
   "dependencies": {
     "electron-positioner": "^3.0.0",
@@ -26,7 +29,13 @@
     "keytar": "^4.1.0",
     "moment": "^2.20.1",
     "nedb": "^1.8.0",
-    "node-fetch": "^1.7.3"
+    "node-fetch": "^2.0.0",
+    "source-map-support": "^0.5.3",
+    "vue-class-component": "^6.1.2",
+    "vue-html-loader": "^1.2.4",
+    "vue-loader": "^14.1.1",
+    "vue-style-loader": "^4.0.2",
+    "vue-template-compiler": "^2.5.13"
   },
   "build": {
     "appId": "com.electron.tomatoad",

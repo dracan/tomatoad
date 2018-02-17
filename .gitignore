@@ -1,6 +1,6 @@
-src/node_modules/
-src/dist/
+node_modules/
 tools/
 tomatoad.*.nupkg
 !Chocolatey/tools/
 src/db/
+dist/
