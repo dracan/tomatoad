@@ -4,6 +4,7 @@
   "description": "Pomodora Desktop Timer",
   "main": "main.js",
   "scripts": {
+    "postinstall": "install-app-deps",
     "dev": "electron-webpack dev",
     "compile": "electron-webpack",
     "dist": "electron-builder"
