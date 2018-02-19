@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+    <div id="about">
         <h1>About Tomatoad</h1>
 
         <p>Tomatoad is a Pomodora Desktop Timer written by <a href="https://www.twitter.com/dracan" target="_blank">Dan Clarke</a>.</p>
@@ -13,8 +13,11 @@
   </div>
 </template>
 
-<script>
+<script scoped>
 </script>
 
-<style>
+<style scoped>
+    #about {
+        padding: 8px;
+    }
 </style>

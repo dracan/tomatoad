@@ -1,8 +1,10 @@
 <template>
-    <div class="container">
-        <div class="col" id="countdown">25:00</div>
-        <div class="col">
-            <i id="overlay-button-start-stop" class="fa fa-play overlay-button" onclick="onClickStartStop()"></i>
+    <div id="overlay">
+        <div class="container">
+            <div class="col" id="countdown">25:00</div>
+            <div class="col">
+                <i id="overlay-button-start-stop" class="fa fa-play overlay-button" onclick="onClickStartStop()"></i>
+            </div>
         </div>
     </div>
 </template>
@@ -66,16 +68,28 @@
 </script>
 
 <style>
+    html, body {
+        margin: 0px;
+        padding: 0px;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+    }
+</style>
+
+<style scoped>
     #countdown {
         font-size: 2em;
         font-family: Arial, Helvetica, sans-serif;
     }
 
-    body {
+    #overlay {
+        width: 100%;
+        height: 100%;
+        padding: 8px;
         background-color: black;
         color: white;
         text-align: center;
-        overflow: hidden;
         cursor: default;
     }
 

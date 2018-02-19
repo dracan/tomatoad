@@ -59,7 +59,7 @@ function createSystemTrayIcon() {
 }
 
 function createOverlayWindow() {
-    overlayWindow = new BrowserWindow({ width: 120, height: 50, frame: false, webPreferences: { webSecurity: false } })
+    overlayWindow = new BrowserWindow({ width: 125, height: 45, frame: false, webPreferences: { webSecurity: false } })
 
     var positioner = new Positioner(overlayWindow)
     positioner.move('bottomRight')

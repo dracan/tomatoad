@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="slack">
     <h1>Slack Integration</h1>
 
     <a href="https://slack.com/oauth/authorize?client_id=2917912883.305906288866&scope=users.profile:write,dnd:write">
@@ -11,5 +11,8 @@
 <script>
 </script>
 
-<style>
+<style scoped>
+    #slack {
+        padding: 8px;
+    }
 </style>
