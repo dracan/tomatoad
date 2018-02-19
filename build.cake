@@ -22,7 +22,7 @@ Task("UpdateSettingsJsonVersion")
     .IsDependentOn("CalculateVersionNumber")
     .WithCriteria(() => !isLocalBuild)
     .Does(() => {
-        DoInDirectory(@"src", () => {
+        DoInDirectory(@"src/main", () => {
             Information("Updating settings.json version to {0}", semVersion);
 
             TransformConfig("settings.json", "settings.json", new TransformationCollection {
@@ -35,20 +35,16 @@ Task("UpdateProjectJsonVersion")
     .IsDependentOn("CalculateVersionNumber")
     .WithCriteria(() => !isLocalBuild)
     .Does(() => {
-        DoInDirectory(@"src", () => {
-            Information("Updating package.json version to {0}", semVersion);
+        Information("Updating package.json version to {0}", semVersion);
 
-            TransformConfig("package.json", "package.json", new TransformationCollection {
-                { "version", semVersion }
-            });
+        TransformConfig("package.json", "package.json", new TransformationCollection {
+            { "version", semVersion }
         });
     });
 
 Task("NpmInstall")
     .Does(() => {
-        DoInDirectory(@"src", () => {
-            NpmInstall();
-        });
+        NpmInstall();
     });
 
 Task("ElectronBuild")
@@ -56,9 +52,8 @@ Task("ElectronBuild")
     .IsDependentOn("UpdateProjectJsonVersion")
     .IsDependentOn("UpdateSettingsJsonVersion")
     .Does(() => {
-        DoInDirectory(@"src", () => {
-            NpmRunScript("dist");
-        });
+        NpmRunScript("compile");
+        NpmRunScript("dist");
     });
 
 Task("ChocolateyUpdateVersionNumbers")
