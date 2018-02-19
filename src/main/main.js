@@ -130,11 +130,15 @@ function createSlackWindow() {
     slackWindow.setMenu(null)
     slackWindow.setIcon(path.join(__dirname, 'images', 'tomato.ico'))
 
-    slackWindow.loadURL(url.format({
-        pathname: path.join(__dirname, 'slack', 'slack.html'),
-        protocol: 'file:',
-        slashes: true,
-    }))
+    if(isDevelopment) {
+        slackWindow.loadURL(`http://localhost:${process.env.ELECTRON_WEBPACK_WDS_PORT}#slack`);
+    } else {
+        slackWindow.loadURL(url.format({
+            pathname: path.join(__dirname, 'slack', 'slack.html'),
+            protocol: 'file:',
+            slashes: true,
+        }))
+    }
 
     slackWindow.webContents.on('did-get-response-details', function (event, status, newURL, originalURL, httpResponseCode, requestMethod, referrer, headers, resourceType) {
         if(newURL.indexOf("https://tomatoadauth.azurewebsites.net/api/slackauth") !== -1) {

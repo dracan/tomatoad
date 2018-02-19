@@ -3,6 +3,7 @@
 import Vue from 'vue'
 import Overlay from './Overlay'
 import About from './About'
+import Slack from './Slack'
 
 require('../../node_modules/font-awesome/css/font-awesome.min.css')
 
@@ -12,6 +13,7 @@ Vue.config.productionTip = false
 const routes = {
     '#overlay': Overlay,
     '#about': About,
+    '#slack': Slack,
 }
 
 const settings = require('../main/settings.json')
@@ -21,9 +23,6 @@ const data = {
 }
 
 const app = new Vue({
-    data: function() {
-        return data2
-    },
     computed: {
         ViewComponent() {
             const matchingView = routes[window.location.hash]
