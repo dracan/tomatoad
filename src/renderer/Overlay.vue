@@ -16,7 +16,7 @@
 
     const ipc = electron.ipcRenderer
 
-    var audio = new Audio(path.join(__dirname, '..', 'sounds', 'timer.wav'));
+    var audio = new Audio(path.join(__static, 'timer.wav'));
 
     let pomodoroRunning = false
 
