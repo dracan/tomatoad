@@ -59,7 +59,7 @@ function createSystemTrayIcon() {
 }
 
 function createOverlayWindow() {
-    overlayWindow = new BrowserWindow({ width: 120, height: 50, frame: false })
+    overlayWindow = new BrowserWindow({ width: 120, height: 50, frame: false, webPreferences: { webSecurity: false } })
 
     var positioner = new Positioner(overlayWindow)
     positioner.move('bottomRight')
@@ -73,11 +73,7 @@ function createOverlayWindow() {
     if(isDevelopment) {
         overlayWindow.loadURL(`http://localhost:${process.env.ELECTRON_WEBPACK_WDS_PORT}#overlay`);
     } else {
-        overlayWindow.loadURL(url.format({
-            pathname: path.join(__dirname, 'index.html#overlay'),
-            protocol: 'file:',
-            slashes: true,
-        }))
+        overlayWindow.loadURL(`file:///${__dirname}/index.html#overlay`)
     }
 
     // For dev
@@ -93,7 +89,7 @@ function createOverlayWindow() {
 }
 
 function createAboutWindow() {
-    aboutWindow = new BrowserWindow({ width: 470, height: 280 })
+    aboutWindow = new BrowserWindow({ width: 470, height: 280, webPreferences: { webSecurity: false } })
 
     aboutWindow.setMenu(null)
     aboutWindow.setIcon(path.join(__static, 'tomato.ico'))
@@ -101,11 +97,7 @@ function createAboutWindow() {
     if(isDevelopment) {
         aboutWindow.loadURL(`http://localhost:${process.env.ELECTRON_WEBPACK_WDS_PORT}#about`);
     } else {
-        aboutWindow.loadURL(url.format({
-            pathname: path.join(__dirname, 'index.html#about'),
-            protocol: 'file:',
-            slashes: true,
-        }))
+        aboutWindow.loadURL(`file:///${__dirname}/index.html#about`)
     }
 
     // Force hyperlinks to open in external browser
@@ -125,7 +117,7 @@ function createAboutWindow() {
 }
 
 function createSlackWindow() {
-    slackWindow = new BrowserWindow({ width: 500, height: 400 })
+    slackWindow = new BrowserWindow({ width: 500, height: 400, webPreferences: { webSecurity: false } })
 
     slackWindow.setMenu(null)
     slackWindow.setIcon(path.join(__dirname, 'images', 'tomato.ico'))
@@ -133,11 +125,7 @@ function createSlackWindow() {
     if(isDevelopment) {
         slackWindow.loadURL(`http://localhost:${process.env.ELECTRON_WEBPACK_WDS_PORT}#slack`);
     } else {
-        slackWindow.loadURL(url.format({
-            pathname: path.join(__dirname, 'slack', 'slack.html'),
-            protocol: 'file:',
-            slashes: true,
-        }))
+        slackWindow.loadURL(`file:///${__dirname}/index.html#slack`)
     }
 
     slackWindow.webContents.on('did-get-response-details', function (event, status, newURL, originalURL, httpResponseCode, requestMethod, referrer, headers, resourceType) {
