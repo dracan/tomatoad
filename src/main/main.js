@@ -71,18 +71,18 @@ function createOverlayWindow() {
     overlayWindow.setSkipTaskbar(true);
 
     if(isDevelopment) {
-        overlayWindow.loadURL(`http://localhost:${process.env.ELECTRON_WEBPACK_WDS_PORT}`);
+        overlayWindow.loadURL(`http://localhost:${process.env.ELECTRON_WEBPACK_WDS_PORT}#overlay`);
     } else {
         overlayWindow.loadURL(url.format({
-            pathname: path.join(__dirname, 'overlay', 'overlay.html'),
+            pathname: path.join(__dirname, 'index.html#overlay'),
             protocol: 'file:',
             slashes: true,
         }))
     }
 
     // For dev
-    overlayWindow.maximize()
-    overlayWindow.webContents.openDevTools()
+    // overlayWindow.maximize()
+    // overlayWindow.webContents.openDevTools()
 
     overlayWindow.on('closed', function () {
         // Dereference the window object, usually you would store windows
@@ -98,11 +98,15 @@ function createAboutWindow() {
     aboutWindow.setMenu(null)
     aboutWindow.setIcon(path.join(__static, 'tomato.ico'))
 
-    aboutWindow.loadURL(url.format({
-        pathname: path.join(__dirname, 'about', 'about.html'),
-        protocol: 'file:',
-        slashes: true,
-    }))
+    if(isDevelopment) {
+        aboutWindow.loadURL(`http://localhost:${process.env.ELECTRON_WEBPACK_WDS_PORT}#about`);
+    } else {
+        aboutWindow.loadURL(url.format({
+            pathname: path.join(__dirname, 'index.html#about'),
+            protocol: 'file:',
+            slashes: true,
+        }))
+    }
 
     // Force hyperlinks to open in external browser
     // (https://stackoverflow.com/questions/32402327/how-can-i-force-external-links-from-browser-window-to-open-in-a-default-browser)
@@ -112,8 +116,8 @@ function createAboutWindow() {
     });
 
     // For dev
-    //aboutWindow.maximize()
-    //aboutWindow.webContents.openDevTools()
+    // aboutWindow.maximize()
+    // aboutWindow.webContents.openDevTools()
 
     aboutWindow.on('closed', function () {
         aboutWindow = null
