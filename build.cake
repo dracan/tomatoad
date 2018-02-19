@@ -52,8 +52,7 @@ Task("ElectronBuild")
     .IsDependentOn("UpdateProjectJsonVersion")
     .IsDependentOn("UpdateSettingsJsonVersion")
     .Does(() => {
-        NpmRunScript("compile");
-        NpmRunScript("dist");
+        NpmRunScript("build");
     });
 
 Task("ChocolateyUpdateVersionNumbers")
