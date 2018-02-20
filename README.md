@@ -1,6 +1,6 @@
 # Tomatoad
 
-![Tomato](https://raw.githubusercontent.com/dracan/tomatoad/master/src/images/tomato.png)
+![Tomato](https://raw.githubusercontent.com/dracan/tomatoad/master/static/tomato.png)
 
 Tomatoad is a cross-platform desktop [Pomodoro](https://en.wikipedia.org/wiki/Pomodoro_Technique) Timer.
 
