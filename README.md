@@ -38,6 +38,8 @@ You'll be able to generate report in both HTML and PDF format.
 * `npm run compile`
 * Finally `npm run dev` to run
 
+This will then _live refresh_, meaning that you can edit the code, and the app will refresh as soon as you save the file without having to restart the app.
+
 # Building installer
 
 * Install [NodeJS](https://nodejs.org/)
