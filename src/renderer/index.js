@@ -25,7 +25,8 @@ const routes = {
 const settings = require('../main/settings.json')
 
 const data = {
-    version: settings.version
+    version: settings.version,
+    selectedSection: 'General',
 }
 
 Vue.use(BootstrapVue);
