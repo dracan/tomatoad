@@ -26,6 +26,7 @@
     "webpack-sources": "1.0.1"
   },
   "dependencies": {
+    "bootstrap-vue": "^2.0.0-rc.1",
     "electron-positioner": "^3.0.0",
     "font-awesome": "^4.7.0",
     "keytar": "^4.1.0",

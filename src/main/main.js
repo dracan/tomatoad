@@ -29,7 +29,7 @@ function createSystemTrayIcon() {
         }, {
             label: 'Settings',
             click: function () {
-                console.log("Clicked on settings")
+                createSettingsWindow()
             }
         }, {
             label: '&About',
@@ -113,6 +113,27 @@ function createAboutWindow() {
 
     aboutWindow.on('closed', function () {
         aboutWindow = null
+    })
+}
+
+function createSettingsWindow() {
+    settingsWindow = new BrowserWindow({ width: 500, height: 400, webPreferences: { webSecurity: false } })
+
+    settingsWindow.setMenu(null)
+    settingsWindow.setIcon(path.join(__static, 'tomato.ico'))
+
+    if(isDevelopment) {
+        settingsWindow.loadURL(`http://localhost:${process.env.ELECTRON_WEBPACK_WDS_PORT}#settings`);
+    } else {
+        settingsWindow.loadURL(`file:///${__dirname}/index.html#settings`)
+    }
+
+    // For dev
+    // settingsWindow.maximize()
+    // settingsWindow.webContents.openDevTools()
+
+    settingsWindow.on('closed', function () {
+        settingsWindow = null
     })
 }
 
