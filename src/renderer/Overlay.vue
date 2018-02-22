@@ -1,13 +1,41 @@
 <template>
     <div id="overlay">
-        <div class="container">
-            <div class="col" id="countdown">25:00</div>
-            <div class="col">
-                <i id="overlay-button-start-stop" class="fa fa-play overlay-button" onclick="onClickStartStop()"></i>
-            </div>
+        <div id="countdown">25:00</div>
+        <div id="buttons">
+            <i id="overlay-button-start-stop" class="fa fa-play overlay-button" onclick="onClickStartStop()"></i>
         </div>
     </div>
 </template>
+
+<style>
+    html, body {
+        overflow: hidden;
+    }
+</style>
+
+<style scoped>
+    #countdown {
+        font-size: 2em;
+        font-family: Arial, Helvetica, sans-serif;
+        display: inline;
+    }
+
+    #buttons {
+    }
+
+    #overlay {
+        background-color: black;
+        color: white;
+        cursor: default;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+    }
+
+    .overlay-button {
+        color: grey;
+    }
+</style>
 
 <script>
     const electron = require('electron')
@@ -66,43 +94,3 @@
         onStop()
     }
 </script>
-
-<style>
-    html, body {
-        margin: 0px;
-        padding: 0px;
-        width: 100%;
-        height: 100%;
-        overflow: hidden;
-    }
-</style>
-
-<style scoped>
-    #countdown {
-        font-size: 2em;
-        font-family: Arial, Helvetica, sans-serif;
-    }
-
-    #overlay {
-        width: 100%;
-        height: 100%;
-        padding: 8px;
-        background-color: black;
-        color: white;
-        text-align: center;
-        cursor: default;
-    }
-
-    .container {
-        display: flex;
-        align-items: center;
-    }
-
-    .col {
-        flex: 1;
-    }
-
-    .overlay-button {
-        color: grey;
-    }
-</style>
