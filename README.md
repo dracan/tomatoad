@@ -30,6 +30,15 @@ By default, all your data will be stored locally. But there will be options to s
 
 You'll be able to generate report in both HTML and PDF format.
 
+# Installing (manual download, or via Chocolatey)
+
+Currently, pre-build binaries are only available for Windows, but when nearing version 1, I'll create Mac and Linux binaries.
+
+There are two ways to install Tomatoad...
+
+* Download and run the latest installation executable from our Github [releases page](https://github.com/dracan/tomatoad/releases).
+* We also publish each build to [Chocolatey](https://chocolatey.org/), so if you have Chocolatey installed, you can just run `cinst tomatoad` from your command line.
+
 # Building from Source
 
 * Install [NodeJS](https://nodejs.org/)
