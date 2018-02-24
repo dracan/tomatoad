@@ -5,7 +5,6 @@ import BootstrapVue from 'bootstrap-vue'
 import Overlay from './Overlay'
 import About from './About'
 import Settings from './Settings'
-import Slack from './Slack'
 
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
@@ -19,7 +18,6 @@ const routes = {
     '#overlay': Overlay,
     '#about': About,
     '#settings': Settings,
-    '#slack': Slack,
 }
 
 Vue.use(BootstrapVue);

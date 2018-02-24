@@ -48,11 +48,6 @@ function createSystemTrayIcon() {
                 createAboutWindow()
             }
         }, {
-            label: '&Slack Integration',
-            click: function () {
-                createSlackWindow()
-            }
-        }, {
             label: 'Report bug or suggest a feature',
             click: function () {
                 shell.openExternal('https://github.com/dracan/tomatoad/issues')
@@ -139,39 +134,19 @@ function createSettingsWindow() {
         settingsWindow.loadURL(`file:///${__dirname}/index.html#settings`)
     }
 
-    // For dev
-    // settingsWindow.maximize()
-    // settingsWindow.webContents.openDevTools()
-
-    settingsWindow.on('closed', function () {
-        settingsWindow = null
-    })
-}
-
-function createSlackWindow() {
-    slackWindow = new BrowserWindow({ width: 500, height: 400, webPreferences: { webSecurity: false } })
-
-    slackWindow.setMenu(null)
-    slackWindow.setIcon(path.join(__static, 'tomato.ico'))
-
-    if(isDevelopment) {
-        slackWindow.loadURL(`http://localhost:${process.env.ELECTRON_WEBPACK_WDS_PORT}#slack`);
-    } else {
-        slackWindow.loadURL(`file:///${__dirname}/index.html#slack`)
-    }
-
-    slackWindow.webContents.on('did-get-response-details', function (event, status, newURL, originalURL, httpResponseCode, requestMethod, referrer, headers, resourceType) {
+    // Handle Slack auth
+    settingsWindow.webContents.on('did-get-response-details', function (event, status, newURL, originalURL, httpResponseCode, requestMethod, referrer, headers, resourceType) {
         if(newURL.indexOf("https://tomatoadauth.azurewebsites.net/api/slackauth") !== -1) {
             slack.setAuthCode(headers['x-team-name'][0], headers['x-auth-code'][0]);
         }
     });
 
     // For dev
-    // slackWindow.maximize()
-    // slackWindow.webContents.openDevTools()
+    // settingsWindow.maximize()
+    // settingsWindow.webContents.openDevTools()
 
-    slackWindow.on('closed', function () {
-        slackWindow = null
+    settingsWindow.on('closed', function () {
+        settingsWindow = null
     })
 }
 
