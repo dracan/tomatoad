@@ -4,9 +4,15 @@ const keytar = require('keytar')
 let _authTokens = {}
 
 module.exports = {
-    loadAuthTokens: function() {
+    loadAuthTokens: function(successCallback) {
         keytar.findCredentials("Tomatoad_Slack").then(creds => {
             _authTokens = {}
+
+            let remaining = creds.length
+
+            if(creds.length === 0) {
+                successCallback()
+            }
 
             creds.forEach(cred => {
                 // Note that I'm re-looking up the password using getPassword rather than just
@@ -16,8 +22,11 @@ module.exports = {
 
                 keytar.getPassword("Tomatoad_Slack", cred.account).then(pw => {
                     _authTokens[cred.account] = pw;
+                    if(--remaining === 0) {
+                        successCallback()
+                    }
                 })
-            });
+            })
         })
     },
 
@@ -25,6 +34,15 @@ module.exports = {
         _authTokens[teamName] = authToken;
 
         keytar.setPassword("Tomatoad_Slack", teamName, authToken)
+    },
+
+    getTeams: function() {
+        return Object.getOwnPropertyNames(_authTokens)
+    },
+
+    revokeTeam: function(teamName) {
+        delete _authTokens[teamName]
+        keytar.deletePassword("Tomatoad_Slack", teamName)
     },
 
     setStatus: function (text, emoji) {

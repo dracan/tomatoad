@@ -18,6 +18,16 @@
                         </b-form>
                     </template>
                     <template v-if="selectedSection == 'Slack'">
+                        <div>
+                            <h3>Existing Slack Teams</h3>
+
+                            <ul>
+                                <li v-for="x in settings.slackTeams" :key="x">
+                                    {{x}} (<a href="#" @click="revokeSlackTeam(x)">revoke</a>)
+                                </li>
+                            </ul>
+                        </div>
+
                         <a href="https://slack.com/oauth/authorize?client_id=2917912883.305906288866&scope=users.profile:write,dnd:write">
                             <img alt="Add to Slack" height="40" width="139" src="https://platform.slack-edge.com/img/add_to_slack.png" srcset="https://platform.slack-edge.com/img/add_to_slack.png 1x, https://platform.slack-edge.com/img/add_to_slack@2x.png 2x" />
                         </a>
@@ -36,6 +46,7 @@
         settings: {
             autoStartBreak: true,
             autoStartNextPomodoro: true,
+            slackTeams: [],
         }
     }
 
@@ -52,6 +63,16 @@
     module.exports = {
         data: function() {
             return data
+        },
+        methods: {
+            revokeSlackTeam: function(teamName) {
+                let index = data.settings.slackTeams.indexOf(teamName)
+                if(index > -1) {
+                    data.settings.slackTeams.splice(index, 1)
+                }
+
+                ipcRenderer.send("revoke-slack-team", teamName)
+            }
         },
         watch: {
             'settings.autoStartBreak': function(val, oldVal) {

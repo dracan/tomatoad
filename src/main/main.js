@@ -15,10 +15,15 @@ let breakLengthSeconds = 300 // 5 minutes
 let settings = {
     autoStartBreak: true,
     autoStartNextPomodoro: true,
+    slackTeams: [],
 };
 
 db.loadSettings(x => {
     Object.assign(settings, x);
+
+    slack.loadAuthTokens(function() {
+        settings.slackTeams = slack.getTeams()
+   })
 })
 
 const isDevelopment = process.env.NODE_ENV !== 'production'
@@ -138,6 +143,7 @@ function createSettingsWindow() {
     settingsWindow.webContents.on('did-get-response-details', function (event, status, newURL, originalURL, httpResponseCode, requestMethod, referrer, headers, resourceType) {
         if(newURL.indexOf("https://tomatoadauth.azurewebsites.net/api/slackauth") !== -1) {
             slack.setAuthCode(headers['x-team-name'][0], headers['x-auth-code'][0]);
+            settings.slackTeams.push(headers['x-team-name'][0])
         }
     });
 
@@ -151,7 +157,6 @@ function createSettingsWindow() {
 }
 
 app.on('ready', function() {
-    slack.loadAuthTokens()
     createSystemTrayIcon();
     createOverlayWindow();
 })
@@ -209,4 +214,13 @@ ipcMain.on('get-settings', (evt) => {
 ipcMain.on('save-settings', (evt, s) => {
     Object.assign(settings, s);
     db.saveSettings(settings)
+})
+
+ipcMain.on('revoke-slack-team', (evt, teamName) => {
+    let index = settings.slackTeams.indexOf(teamName)
+    if(index > -1) {
+        settings.slackTeams.splice(index, 1)
+    }
+
+    slack.revokeTeam(teamName)
 })
