@@ -14,6 +14,15 @@
 </template>
 
 <script scoped>
+    const settings = require('../main/settings.json')
+
+    module.exports = {
+        data: function() {
+            return {
+                version: settings.version
+            }
+        }
+    }
 </script>
 
 <style scoped>

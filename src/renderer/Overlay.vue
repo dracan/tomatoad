@@ -47,6 +47,7 @@
     var audio = new Audio(path.join(__static, 'timer.wav'));
 
     let pomodoroRunning = false
+    let isNextTimerABreak = false
 
     const getTimeString = (seconds) => {
         let momentTime = moment.duration(seconds, 'seconds')
@@ -68,10 +69,11 @@
     onClickStartStop = function () {
         if(pomodoroRunning) {
             onStop()
-            ipc.send("pomodoro-stop")
+            ipc.send(isNextTimerABreak ? "break-stop" : "pomodoro-stop")
+            isNextTimerABreak = false
         } else {
             onStart()
-            ipc.send("pomodoro-start")
+            ipc.send(isNextTimerABreak ? "break-start" : "pomodoro-start")
         }
     }
 
@@ -92,5 +94,6 @@
     function onComplete() {
         audio.play();
         onStop()
+        isNextTimerABreak = !isNextTimerABreak
     }
 </script>

@@ -22,13 +22,6 @@ const routes = {
     '#slack': Slack,
 }
 
-const settings = require('../main/settings.json')
-
-const data = {
-    version: settings.version,
-    selectedSection: 'General',
-}
-
 Vue.use(BootstrapVue);
 
 const app = new Vue({
@@ -38,10 +31,6 @@ const app = new Vue({
 
             if (!matchingView) {
                 throw new `No matching view for ${this.currentRoute}`
-            }
-
-            matchingView.data = function() {
-                return data
             }
 
             return matchingView

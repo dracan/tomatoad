@@ -1,12 +1,24 @@
 const Datastore = require('nedb')
 const path = require('path')
 
-const dbPath = path.dirname(process.execPath) + '/db/db.json'
-const db = new Datastore({ filename: dbPath, autoload: true });
+const settingsDbPath = path.dirname(process.execPath) + '/db/settings.json'
+const dbSettings = new Datastore({ filename: settingsDbPath, autoload: true });
 
-db.persistence.compactDatafile()
+dbSettings.persistence.compactDatafile()
 
 module.exports = {
+    saveSettings: function (settings) {
+        let obj = Object.assign({ _id: 'settings' }, settings)
+
+        dbSettings.update({ _id: 'settings' }, obj, { upsert: true }, function (err, numReplaced, upsert) {});
+    },
+
+    loadSettings: function (callback) {
+        dbSettings.find({ _id: 'settings' }, function (err, docs) {
+            callback(docs[0])
+        });
+    },
+
     saveNewPomodoro: function (callback) {
         /*
         var pomodoro = {

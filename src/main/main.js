@@ -7,9 +7,19 @@ const url = require('url')
 
 const countdown = require('./countdown')
 const slack = require('./slack/slack.main')
+const db = require('./database/database')
 
 let pomodoroLengthSeconds = 1500 // 25 minutes
 let breakLengthSeconds = 300 // 5 minutes
+
+let settings = {
+    autoStartBreak: true,
+    autoStartNextPomodoro: true,
+};
+
+db.loadSettings(x => {
+    Object.assign(settings, x);
+})
 
 const isDevelopment = process.env.NODE_ENV !== 'production'
 
@@ -18,6 +28,7 @@ const isDevelopment = process.env.NODE_ENV !== 'production'
 let trayIcon
 let overlayWindow
 let aboutWindow
+let settingsWindow
 
 function createSystemTrayIcon() {
     trayIcon = new Tray(path.join(__static, 'tomato.ico'))
@@ -123,7 +134,7 @@ function createSettingsWindow() {
     settingsWindow.setIcon(path.join(__static, 'tomato.ico'))
 
     if(isDevelopment) {
-        settingsWindow.loadURL(`http://localhost:${process.env.ELECTRON_WEBPACK_WDS_PORT}#settings`);
+        settingsWindow.loadURL(`http://localhost:${process.env.ELECTRON_WEBPACK_WDS_PORT}#settings`)
     } else {
         settingsWindow.loadURL(`file:///${__dirname}/index.html#settings`)
     }
@@ -182,9 +193,11 @@ ipcMain.on('pomodoro-start', (evt) => {
         slack.setStatus("", "")
         slack.setDoNotDisturb(0)
 
-        setTimeout(_ => {
-            ipcMain.emit('break-start')
-        }, 1000);
+        if(settings.autoStartBreak) {
+            setTimeout(_ => {
+                ipcMain.emit('break-start')
+            }, 1000);
+        }
     });
 
     broadcastEvent('pomodoro-start')
@@ -197,6 +210,12 @@ ipcMain.on('break-start', (evt) => {
         broadcastEvent("countdown", count)
     }, () => {
         broadcastEvent('break-complete')
+
+        if(settings.autoStartNextPomodoro) {
+            setTimeout(_ => {
+                ipcMain.emit('pomodoro-start')
+            }, 1000);
+        }
     });
 
     broadcastEvent('break-start')
@@ -206,4 +225,13 @@ ipcMain.on('pomodoro-stop', (evt) => {
     countdown.stop()
     slack.setStatus("", "")
     slack.setDoNotDisturb(0)
+})
+
+ipcMain.on('get-settings', (evt) => {
+    settingsWindow && settingsWindow.webContents.send('got-settings', settings)
+})
+
+ipcMain.on('save-settings', (evt, s) => {
+    Object.assign(settings, s);
+    db.saveSettings(settings)
 })
