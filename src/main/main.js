@@ -216,6 +216,10 @@ ipcMain.on('pomodoro-stop', (evt) => {
     slack.setDoNotDisturb(0)
 })
 
+ipcMain.on('break-stop', (evt) => {
+    countdown.stop()
+})
+
 ipcMain.on('get-settings', (evt) => {
     settingsWindow && settingsWindow.webContents.send('got-settings', settings)
 })

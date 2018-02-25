@@ -1,5 +1,5 @@
 <template>
-    <div id="overlay">
+    <div id="overlay" v-bind:class="{ breakMode: isBreak }">
         <div id="countdown">25:00</div>
         <div id="buttons">
             <i id="overlay-button-start-stop" class="fa fa-play overlay-button" onclick="onClickStartStop()"></i>
@@ -10,6 +10,7 @@
 <style>
     html, body {
         overflow: hidden;
+        height: 100%;
     }
 </style>
 
@@ -24,13 +25,21 @@
     }
 
     #overlay {
+        border: 3px solid #800000;
         background-color: black;
+        height: 100%;
         color: white;
         cursor: default;
         display: flex;
         justify-content: space-around;
         align-items: center;
     }
+
+    .breakMode {
+        border: 3px solid green !important;
+    }
+
+    border: 3px solid green; */
 
     .overlay-button {
         color: grey;
@@ -44,10 +53,19 @@
 
     const ipc = electron.ipcRenderer
 
-    var audio = new Audio(path.join(__static, 'timer.wav'));
+    var audio = new Audio(path.join(__static, 'timer.wav'))
 
     let pomodoroRunning = false
-    let isNextTimerABreak = false
+
+    const data = {
+        isBreak: false,
+    }
+
+    module.exports = {
+        data: function() {
+            return data
+        },
+    }
 
     const getTimeString = (seconds) => {
         let momentTime = moment.duration(seconds, 'seconds')
@@ -69,11 +87,11 @@
     onClickStartStop = function () {
         if(pomodoroRunning) {
             onStop()
-            ipc.send(isNextTimerABreak ? "break-stop" : "pomodoro-stop")
-            isNextTimerABreak = false
+            ipc.send(data.isBreak ? "break-stop" : "pomodoro-stop")
+            data.isBreak = false
         } else {
             onStart()
-            ipc.send(isNextTimerABreak ? "break-start" : "pomodoro-start")
+            ipc.send(data.isBreak ? "break-start" : "pomodoro-start")
         }
     }
 
@@ -94,6 +112,6 @@
     function onComplete() {
         audio.play();
         onStop()
-        isNextTimerABreak = !isNextTimerABreak
+        data.isBreak = !data.isBreak
     }
 </script>
