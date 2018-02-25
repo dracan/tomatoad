@@ -19,7 +19,7 @@
   "license": "MIT",
   "devDependencies": {
     "electron": "^1.8.2",
-    "electron-builder": "^20.0.5",
+    "electron-builder": "^20.2.0",
     "electron-webpack": "1.12.1",
     "vue": "^2.5.13",
     "webpack": "^3.10.0",
@@ -29,6 +29,7 @@
     "bootstrap-vue": "^2.0.0-rc.1",
     "electron-positioner": "^3.0.0",
     "font-awesome": "^4.7.0",
+    "jquery": "^3.3.1",
     "keytar": "^4.1.0",
     "moment": "^2.20.1",
     "nedb": "^1.8.0",
