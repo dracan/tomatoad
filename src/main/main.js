@@ -133,17 +133,26 @@ function createSettingsWindow() {
     settingsWindow.setMenu(null)
     settingsWindow.setIcon(path.join(__static, 'tomato.ico'))
 
-    if(isDevelopment) {
-        settingsWindow.loadURL(`http://localhost:${process.env.ELECTRON_WEBPACK_WDS_PORT}#settings`)
-    } else {
-        settingsWindow.loadURL(`file:///${__dirname}/index.html#settings`)
+    const loadUrlFunction = function() {
+        if(isDevelopment) {
+            settingsWindow.loadURL(`http://localhost:${process.env.ELECTRON_WEBPACK_WDS_PORT}#settings`)
+        } else {
+            settingsWindow.loadURL(`file:///${__dirname}/index.html#settings`)
+        }
+
+        settingsWindow.setTitle("Settings")
     }
+
+    loadUrlFunction()
 
     // Handle Slack auth
     settingsWindow.webContents.on('did-get-response-details', function (event, status, newURL, originalURL, httpResponseCode, requestMethod, referrer, headers, resourceType) {
         if(newURL.indexOf("https://tomatoadauth.azurewebsites.net/api/slackauth") !== -1) {
-            slack.setAuthCode(headers['x-team-name'][0], headers['x-auth-code'][0]);
-            settings.slackTeams.push(headers['x-team-name'][0])
+            if(headers['x-team-name'] && headers['x-team-name'][0] && headers['x-auth-code'] && headers['x-auth-code'][0]) {
+                slack.setAuthCode(headers['x-team-name'][0], headers['x-auth-code'][0]);
+                settings.slackTeams.push(headers['x-team-name'][0])
+                loadUrlFunction()
+            }
         }
     });
 
