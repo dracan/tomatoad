@@ -15,6 +15,7 @@ let breakLengthSeconds = 300 // 5 minutes
 let settings = {
     autoStartBreak: true,
     autoStartNextPomodoro: true,
+    askForNotes: true,
     slackTeams: [],
 };
 
@@ -34,6 +35,7 @@ let trayIcon
 let overlayWindow
 let aboutWindow
 let settingsWindow
+let notesBeforeWindow
 
 function createSystemTrayIcon() {
     trayIcon = new Tray(path.join(__static, 'tomato.ico'))
@@ -165,6 +167,28 @@ function createSettingsWindow() {
     })
 }
 
+function createNotesBeforeWindow() {
+    notesBeforeWindow = new BrowserWindow({ width: 500, height: 400, webPreferences: { webSecurity: false } })
+
+    notesBeforeWindow.setMenu(null)
+    notesBeforeWindow.setIcon(path.join(__static, 'tomato.ico'))
+    notesBeforeWindow.setAlwaysOnTop(true, "floating")
+
+    if(isDevelopment) {
+        notesBeforeWindow.loadURL(`http://localhost:${process.env.ELECTRON_WEBPACK_WDS_PORT}#notes-before`)
+    } else {
+        notesBeforeWindow.loadURL(`file:///${__dirname}/index.html#notes-before`)
+    }
+
+    // For dev
+    // notesBeforeWindow.maximize()
+    // notesBeforeWindow.webContents.openDevTools()
+
+    notesBeforeWindow.on('closed', function () {
+        notesBeforeWindow = null
+    })
+}
+
 app.on('ready', function() {
     createSystemTrayIcon();
     createOverlayWindow();
@@ -175,6 +199,14 @@ broadcastEvent = function(eventName, arg) {
 }
 
 ipcMain.on('pomodoro-start', (evt) => {
+    if(settings.askForNotes) {
+        createNotesBeforeWindow()
+    } else {
+        onPomodoroStart()
+    }
+})
+
+function onPomodoroStart() {
     countdown.init(pomodoroLengthSeconds, count => {
         broadcastEvent("countdown", count)
     }, () => {
@@ -192,7 +224,7 @@ ipcMain.on('pomodoro-start', (evt) => {
     broadcastEvent('pomodoro-start')
     slack.setStatus("25 minutes", ":tomato:")
     slack.setDoNotDisturb(25)
-})
+}
 
 ipcMain.on('break-start', (evt) => {
     countdown.init(breakLengthSeconds, count => {

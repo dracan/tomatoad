@@ -5,6 +5,7 @@ import BootstrapVue from 'bootstrap-vue'
 import Overlay from './Overlay'
 import About from './About'
 import Settings from './Settings'
+import NotesBefore from './NotesBefore'
 
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
@@ -18,6 +19,7 @@ const routes = {
     '#overlay': Overlay,
     '#about': About,
     '#settings': Settings,
+    '#notes-before': NotesBefore,
 }
 
 Vue.use(BootstrapVue);
