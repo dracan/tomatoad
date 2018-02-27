@@ -168,11 +168,12 @@ function createSettingsWindow() {
 }
 
 function createNotesBeforeWindow() {
-    notesBeforeWindow = new BrowserWindow({ width: 500, height: 400, webPreferences: { webSecurity: false } })
+    notesBeforeWindow = new BrowserWindow({ width: 500, height: 200, webPreferences: { webSecurity: false } })
 
     notesBeforeWindow.setMenu(null)
     notesBeforeWindow.setIcon(path.join(__static, 'tomato.ico'))
     notesBeforeWindow.setAlwaysOnTop(true, "floating")
+    notesBeforeWindow.setTitle("Pomodoro Goals")
 
     if(isDevelopment) {
         notesBeforeWindow.loadURL(`http://localhost:${process.env.ELECTRON_WEBPACK_WDS_PORT}#notes-before`)
@@ -198,8 +199,12 @@ broadcastEvent = function(eventName, arg) {
     overlayWindow && overlayWindow.webContents.send(eventName, arg)
 }
 
-ipcMain.on('pomodoro-start', (evt) => {
-    if(settings.askForNotes) {
+ipcMain.on('pomodoro-start', (evt, force) => {
+    if(notesBeforeWindow) {
+        notesBeforeWindow.close()
+    }
+
+    if(settings.askForNotes && !force) {
         createNotesBeforeWindow()
     } else {
         onPomodoroStart()
