@@ -82,7 +82,7 @@
     ipc.on('break-start', (evt) => { onStart() })
     ipc.on('break-stop', (evt) => { onStop() })
     ipc.on('break-complete', (evt) => { onComplete() })
-    ipc.on('countdown', (evt, count) => { document.getElementById('countdown').innerHTML = getTimeString(count); })
+    ipc.on('countdown', (evt, count) => { document.getElementById('countdown').innerHTML = getTimeString(count) })
 
     onClickStartStop = function () {
         if(pomodoroRunning) {
@@ -90,7 +90,6 @@
             ipc.send(data.isBreak ? "break-stop" : "pomodoro-stop")
             data.isBreak = false
         } else {
-            onStart()
             ipc.send(data.isBreak ? "break-start" : "pomodoro-start")
         }
     }
