@@ -1,7 +1,7 @@
 <template>
     <div id="notes">
         <b-form-group>
-            <b-form-textarea id="textarea1"
+            <b-form-textarea
                 v-model="textBefore"
                 placeholder="Enter goal(s) for this Pomodoro"
                 :rows="3"
@@ -41,7 +41,7 @@
         },
         methods: {
             onClick() {
-                ipc.send('pomodoro-start', true)
+                ipc.send('pomodoro-start', true, data.textBefore)
             },
         },
     }

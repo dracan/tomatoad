@@ -19,6 +19,8 @@ let settings = {
     slackTeams: [],
 };
 
+let currentPomodoro = null
+
 db.loadSettings(x => {
     Object.assign(settings, x);
 
@@ -36,6 +38,7 @@ let overlayWindow
 let aboutWindow
 let settingsWindow
 let notesBeforeWindow
+let notesAfterWindow
 
 function createSystemTrayIcon() {
     trayIcon = new Tray(path.join(__static, 'tomato.ico'))
@@ -190,6 +193,34 @@ function createNotesBeforeWindow() {
     })
 }
 
+function createNotesAfterWindow() {
+    notesAfterWindow = new BrowserWindow({ width: 500, height: 400, webPreferences: { webSecurity: false }, show: false })
+
+    notesAfterWindow.setMenu(null)
+    notesAfterWindow.setIcon(path.join(__static, 'tomato.ico'))
+    notesAfterWindow.setAlwaysOnTop(true, "floating")
+    notesAfterWindow.setTitle("Pomodoro Completed")
+
+    notesAfterWindow.once('ready-to-show', () => {
+        notesAfterWindow.show()
+        notesAfterWindow.webContents.send('init-data', currentPomodoro)
+    })
+
+    if(isDevelopment) {
+        notesAfterWindow.loadURL(`http://localhost:${process.env.ELECTRON_WEBPACK_WDS_PORT}#notes-after`)
+    } else {
+        notesAfterWindow.loadURL(`file:///${__dirname}/index.html#notes-after`)
+    }
+
+    // For dev
+    // notesAfterWindow.maximize()
+    // notesAfterWindow.webContents.openDevTools()
+
+    notesAfterWindow.on('closed', function () {
+        notesAfterWindow = null
+    })
+}
+
 app.on('ready', function() {
     createSystemTrayIcon();
     createOverlayWindow();
@@ -199,7 +230,7 @@ broadcastEvent = function(eventName, arg) {
     overlayWindow && overlayWindow.webContents.send(eventName, arg)
 }
 
-ipcMain.on('pomodoro-start', (evt, force) => {
+ipcMain.on('pomodoro-start', (evt, force, textBefore) => {
     if(notesBeforeWindow) {
         notesBeforeWindow.close()
     }
@@ -207,14 +238,16 @@ ipcMain.on('pomodoro-start', (evt, force) => {
     if(settings.askForNotes && !force) {
         createNotesBeforeWindow()
     } else {
-        onPomodoroStart()
+        onPomodoroStart(textBefore)
     }
 })
 
-function onPomodoroStart() {
+function onPomodoroStart(textBefore) {
     countdown.init(pomodoroLengthSeconds, count => {
         broadcastEvent("countdown", count)
     }, () => {
+        createNotesAfterWindow()
+
         broadcastEvent('pomodoro-complete')
         slack.setStatus("", "")
         slack.setDoNotDisturb(0)
@@ -227,6 +260,14 @@ function onPomodoroStart() {
     });
 
     broadcastEvent('pomodoro-start')
+
+    currentPomodoro = {
+        completed: false,
+        textBefore: textBefore,
+    }
+
+    db.savePomodoro(currentPomodoro)
+
     slack.setStatus("25 minutes", ":tomato:")
     slack.setDoNotDisturb(25)
 }
@@ -247,6 +288,11 @@ ipcMain.on('break-start', (evt) => {
     broadcastEvent('break-start')
 })
 
+ipcMain.on('save-completed-pomodoro', (evt, data) => {
+    Object.assign(currentPomodoro, data);
+    db.savePomodoro(currentPomodoro)
+})
+
 ipcMain.on('pomodoro-stop', (evt) => {
     countdown.stop()
     slack.setStatus("", "")
@@ -255,6 +301,12 @@ ipcMain.on('pomodoro-stop', (evt) => {
 
 ipcMain.on('break-stop', (evt) => {
     countdown.stop()
+})
+
+ipcMain.on('close-notes-after', (evt) => {
+    if(notesAfterWindow) {
+        notesAfterWindow.close()
+    }
 })
 
 ipcMain.on('get-settings', (evt) => {
