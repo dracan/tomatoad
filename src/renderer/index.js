@@ -5,6 +5,9 @@ import BootstrapVue from 'bootstrap-vue'
 import Overlay from './Overlay'
 import About from './About'
 import Settings from './Settings'
+import NotesBefore from './NotesBefore'
+import NotesAfter from './NotesAfter'
+import {StarRating} from 'vue-rate-it'
 
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
@@ -18,9 +21,13 @@ const routes = {
     '#overlay': Overlay,
     '#about': About,
     '#settings': Settings,
+    '#notes-before': NotesBefore,
+    '#notes-after': NotesAfter,
 }
 
 Vue.use(BootstrapVue);
+
+Vue.component('star-rating', StarRating);
 
 const app = new Vue({
     computed: {

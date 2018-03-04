@@ -15,8 +15,11 @@ let breakLengthSeconds = 300 // 5 minutes
 let settings = {
     autoStartBreak: true,
     autoStartNextPomodoro: true,
+    askForNotes: true,
     slackTeams: [],
 };
+
+let currentPomodoro = null
 
 db.loadSettings(x => {
     Object.assign(settings, x);
@@ -34,6 +37,8 @@ let trayIcon
 let overlayWindow
 let aboutWindow
 let settingsWindow
+let notesBeforeWindow
+let notesAfterWindow
 
 function createSystemTrayIcon() {
     trayIcon = new Tray(path.join(__static, 'tomato.ico'))
@@ -165,6 +170,57 @@ function createSettingsWindow() {
     })
 }
 
+function createNotesBeforeWindow() {
+    notesBeforeWindow = new BrowserWindow({ width: 500, height: 200, webPreferences: { webSecurity: false } })
+
+    notesBeforeWindow.setMenu(null)
+    notesBeforeWindow.setIcon(path.join(__static, 'tomato.ico'))
+    notesBeforeWindow.setAlwaysOnTop(true, "floating")
+    notesBeforeWindow.setTitle("Pomodoro Goals")
+
+    if(isDevelopment) {
+        notesBeforeWindow.loadURL(`http://localhost:${process.env.ELECTRON_WEBPACK_WDS_PORT}#notes-before`)
+    } else {
+        notesBeforeWindow.loadURL(`file:///${__dirname}/index.html#notes-before`)
+    }
+
+    // For dev
+    // notesBeforeWindow.maximize()
+    // notesBeforeWindow.webContents.openDevTools()
+
+    notesBeforeWindow.on('closed', function () {
+        notesBeforeWindow = null
+    })
+}
+
+function createNotesAfterWindow() {
+    notesAfterWindow = new BrowserWindow({ width: 600, height: 350, webPreferences: { webSecurity: false }, show: false })
+
+    notesAfterWindow.setMenu(null)
+    notesAfterWindow.setIcon(path.join(__static, 'tomato.ico'))
+    notesAfterWindow.setAlwaysOnTop(true, "floating")
+    notesAfterWindow.setTitle("Pomodoro Completed")
+
+    notesAfterWindow.once('ready-to-show', () => {
+        notesAfterWindow.show()
+        notesAfterWindow.webContents.send('init-data', currentPomodoro)
+    })
+
+    if(isDevelopment) {
+        notesAfterWindow.loadURL(`http://localhost:${process.env.ELECTRON_WEBPACK_WDS_PORT}#notes-after`)
+    } else {
+        notesAfterWindow.loadURL(`file:///${__dirname}/index.html#notes-after`)
+    }
+
+    // For dev
+    // notesAfterWindow.maximize()
+    // notesAfterWindow.webContents.openDevTools()
+
+    notesAfterWindow.on('closed', function () {
+        notesAfterWindow = null
+    })
+}
+
 app.on('ready', function() {
     createSystemTrayIcon();
     createOverlayWindow();
@@ -174,10 +230,24 @@ broadcastEvent = function(eventName, arg) {
     overlayWindow && overlayWindow.webContents.send(eventName, arg)
 }
 
-ipcMain.on('pomodoro-start', (evt) => {
+ipcMain.on('pomodoro-start', (evt, force, textBefore) => {
+    if(notesBeforeWindow) {
+        notesBeforeWindow.close()
+    }
+
+    if(settings.askForNotes && !force) {
+        createNotesBeforeWindow()
+    } else {
+        onPomodoroStart(textBefore)
+    }
+})
+
+function onPomodoroStart(textBefore) {
     countdown.init(pomodoroLengthSeconds, count => {
         broadcastEvent("countdown", count)
     }, () => {
+        createNotesAfterWindow()
+
         broadcastEvent('pomodoro-complete')
         slack.setStatus("", "")
         slack.setDoNotDisturb(0)
@@ -190,9 +260,17 @@ ipcMain.on('pomodoro-start', (evt) => {
     });
 
     broadcastEvent('pomodoro-start')
+
+    currentPomodoro = {
+        completed: false,
+        textBefore: textBefore,
+    }
+
+    db.savePomodoro(currentPomodoro)
+
     slack.setStatus("25 minutes", ":tomato:")
     slack.setDoNotDisturb(25)
-})
+}
 
 ipcMain.on('break-start', (evt) => {
     countdown.init(breakLengthSeconds, count => {
@@ -210,6 +288,11 @@ ipcMain.on('break-start', (evt) => {
     broadcastEvent('break-start')
 })
 
+ipcMain.on('save-completed-pomodoro', (evt, data) => {
+    Object.assign(currentPomodoro, data);
+    db.savePomodoro(currentPomodoro)
+})
+
 ipcMain.on('pomodoro-stop', (evt) => {
     countdown.stop()
     slack.setStatus("", "")
@@ -218,6 +301,12 @@ ipcMain.on('pomodoro-stop', (evt) => {
 
 ipcMain.on('break-stop', (evt) => {
     countdown.stop()
+})
+
+ipcMain.on('close-notes-after', (evt) => {
+    if(notesAfterWindow) {
+        notesAfterWindow.close()
+    }
 })
 
 ipcMain.on('get-settings', (evt) => {

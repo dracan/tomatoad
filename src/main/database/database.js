@@ -1,10 +1,12 @@
 const Datastore = require('nedb')
 const path = require('path')
 
-const settingsDbPath = path.dirname(process.execPath) + '/db/settings.json'
-const dbSettings = new Datastore({ filename: settingsDbPath, autoload: true });
+const dbPath = path.dirname(process.execPath)
+const dbSettings = new Datastore({ filename: dbPath + '/db/settings.json', autoload: true });
+const dbPomodoros = new Datastore({ filename: dbPath + '/db/pomodoros.json', autoload: true });
 
 dbSettings.persistence.compactDatafile()
+dbPomodoros.persistence.compactDatafile()
 
 module.exports = {
     saveSettings: function (settings) {
@@ -19,17 +21,13 @@ module.exports = {
         });
     },
 
-    saveNewPomodoro: function (callback) {
-        /*
-        var pomodoro = {
-            _id: new Date().toISOString(),
-            completed: false
+    savePomodoro: function (pomodoro) {
+        if(!pomodoro._id) {
+            pomodoro._id = new Date().toISOString()
         }
 
-        db.insert(pomodoro, function (err, newDoc) {   // Callback is optional
-            // newDoc is the newly inserted document, including its _id
-            // newDoc has no key called notToBeSaved since its value was undefined
-        });
-        */
+        dbPomodoros.update({ _id: pomodoro._id }, pomodoro, { upsert: true })
+
+        return pomodoro
     }
 }
