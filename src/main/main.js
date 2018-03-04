@@ -194,7 +194,7 @@ function createNotesBeforeWindow() {
 }
 
 function createNotesAfterWindow() {
-    notesAfterWindow = new BrowserWindow({ width: 500, height: 400, webPreferences: { webSecurity: false }, show: false })
+    notesAfterWindow = new BrowserWindow({ width: 600, height: 350, webPreferences: { webSecurity: false }, show: false })
 
     notesAfterWindow.setMenu(null)
     notesAfterWindow.setIcon(path.join(__static, 'tomato.ico'))

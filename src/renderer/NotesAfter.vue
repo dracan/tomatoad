@@ -1,23 +1,37 @@
 <template>
     <div id="notes">
-        <h3>Pomodoro Complete</h3>
-        <hr>
-        <b-form-group label="Rate your Pomodoro ...">
-            <b-form-checkbox v-model="goalComplete">Did you complete your goal?</b-form-checkbox>
-            <b-form-checkbox v-model="goodFocus">Did you feel focused throughout?</b-form-checkbox>
-        </b-form-group>
+        <h3>Rate your Pomodoro!</h3>
 
-        <hr>
+        <div>
+            <div class="horz-container">
+                <div class="item1">
+                    <h4>Goal Completion</h4>
+                    <star-rating
+                        v-model="goalRating"
+                        show-rating="false"
+                        active-color="#cc3300"
+                        item-size=30></star-rating>
 
-        <b-form-group label="Your Goal Notes..." v-if="textBefore">
-            <b-form-textarea
-                plaintext
-                v-model="textBefore"
-                placeholder="Enter goal(s) for this Pomodoro"
-                :rows="3"
-                :max-rows="6">
-            </b-form-textarea>
-        </b-form-group>
+                    <h4>Focus</h4>
+                    <star-rating
+                        v-model="focusRating"
+                        show-rating="false"
+                        active-color="#cc3300"
+                        item-size=30></star-rating>
+                </div>
+                <div class="item1">
+                    <b-form-group label="Your Goal Notes..." v-if="textBefore">
+                        <b-form-textarea
+                            plaintext
+                            v-model="textBefore"
+                            placeholder="Enter goal(s) for this Pomodoro"
+                            :rows="3"
+                            :max-rows="6">
+                        </b-form-textarea>
+                    </b-form-group>
+                </div>
+            </div>
+        </div>
 
         <b-button type="submit" variant="primary" @click="onClick()">Save Pomodora and Start Break</b-button>
     </div>
@@ -26,6 +40,7 @@
 <style>
     html, body {
         overflow: hidden;
+        height: 100%;
     }
 </style>
 
@@ -34,7 +49,17 @@
         background-color: white;
         color: black;
         margin: 10px;
+        height: 95%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
     }
+
+    .horz-container {
+        display: flex;
+    }
+
+    .item1 { flex: 1; }
 </style>
 
 <script>
@@ -43,8 +68,8 @@
 
     const data = {
         textBefore: "(none entered)",
-        goalComplete: false,
-        goodFocus: false,
+        goalRating: 0,
+        focusRating: 0,
     }
 
     ipc.on('init-data', (evt, pomodoro) => {

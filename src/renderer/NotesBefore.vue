@@ -9,7 +9,7 @@
             </b-form-textarea>
         </b-form-group>
 
-        <b-button type="submit" variant="primary" @click="onClick()">Start</b-button>
+        <b-button type="submit" class="start-button" variant="primary" @click="onClick()">Start Pomodoro</b-button>
     </div>
 </template>
 
@@ -24,6 +24,10 @@
         background-color: white;
         color: black;
         margin: 10px;
+    }
+
+    .start-button {
+        width: 100%;
     }
 </style>
 

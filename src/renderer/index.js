@@ -7,6 +7,7 @@ import About from './About'
 import Settings from './Settings'
 import NotesBefore from './NotesBefore'
 import NotesAfter from './NotesAfter'
+import {StarRating} from 'vue-rate-it'
 
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
@@ -25,6 +26,8 @@ const routes = {
 }
 
 Vue.use(BootstrapVue);
+
+Vue.component('star-rating', StarRating);
 
 const app = new Vue({
     computed: {
