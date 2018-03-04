@@ -1,1 +1,1 @@
-Install-ChocolateyPackage 'Tomatoad' 'exe' '/S' 'https://github.com/dracan/tomatoad/releases/download/0.4.0/Tomatoad.Setup.0.4.0.exe'
+Install-ChocolateyPackage 'Tomatoad' 'exe' '/S' 'https://github.com/dracan/tomatoad/releases/download/0.5.0/Tomatoad.Setup.0.5.0.exe'
