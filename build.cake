@@ -122,7 +122,7 @@ Task("GitHubRelease")
                 TargetCommitish = "master"
             });
 
-        var packageFile = File($"src/dist/Tomatoad Setup {semVersion}.exe");
+        var packageFile = File($"dist/Tomatoad Setup {semVersion}.exe");
 
         GitReleaseManagerAddAssets(gitHubUsername, gitHubPassword, "dracan", "tomatoad", semVersion, packageFile);
         GitReleaseManagerClose(gitHubUsername, gitHubPassword, "dracan", "tomatoad", semVersion);
