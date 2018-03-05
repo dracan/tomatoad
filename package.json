@@ -1,6 +1,6 @@
 {
   "name": "Tomatoad",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "Pomodora Desktop Timer",
   "main": "main.js",
   "scripts": {
