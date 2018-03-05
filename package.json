@@ -21,7 +21,6 @@
     "electron": "^1.8.2",
     "electron-builder": "^20.2.0",
     "electron-webpack": "1.12.1",
-    "vue": "^2.5.13",
     "webpack": "^3.10.0",
     "webpack-sources": "1.0.1"
   },
@@ -35,6 +34,7 @@
     "nedb": "^1.8.0",
     "node-fetch": "^2.0.0",
     "source-map-support": "^0.5.3",
+    "vue": "^2.5.13",
     "vue-class-component": "^6.1.2",
     "vue-html-loader": "^1.2.4",
     "vue-loader": "^14.1.1",
