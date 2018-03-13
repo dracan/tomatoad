@@ -8,6 +8,7 @@ const url = require('url')
 const countdown = require('./countdown')
 const slack = require('./slack/slack.main')
 const db = require('./database/database')
+const appSettings = require('./settings.json')
 
 let pomodoroLengthSeconds = 1500 // 25 minutes
 let breakLengthSeconds = 300 // 5 minutes
@@ -56,6 +57,11 @@ function createSystemTrayIcon() {
             label: '&About',
             click: function () {
                 createAboutWindow()
+            }
+        }, {
+            label: 'What\'s New?',
+            click: function () {
+                shell.openExternal(`https://github.com/dracan/tomatoad/releases/tag/${appSettings.version}`)
             }
         }, {
             label: 'Report bug or suggest a feature',
