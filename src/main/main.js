@@ -76,6 +76,10 @@ function createSystemTrayIcon() {
         }
     ]
 
+    trayIcon.on('click', () => {
+        overlayWindow.isVisible() ? overlayWindow.hide() : overlayWindow.show()
+    })
+
     let trayMenu = Menu.buildFromTemplate(trayMenuTemplate)
     trayIcon.setContextMenu(trayMenu)
 }
