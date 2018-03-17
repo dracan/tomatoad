@@ -5,6 +5,7 @@
 #tool "nuget:?package=GitVersion.CommandLine"
 #addin "nuget:?package=MagicChunks"
 #tool "nuget:?package=gitreleasemanager"
+#addin "Cake.Figlet"
 
 var target = Argument("target", "Default");
 var configuration = Argument("configuration", "Release");
@@ -137,6 +138,7 @@ Task("Publish")
 Task("Default")
     .IsDependentOn("Publish")
     .Does(() => {
+        Information(Figlet("Success"));
     });
 
 RunTarget(target);
