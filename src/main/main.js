@@ -85,7 +85,7 @@ function createSystemTrayIcon() {
 }
 
 function createOverlayWindow() {
-    overlayWindow = new BrowserWindow({ width: 125, height: 45, frame: false, webPreferences: { webSecurity: false } })
+    overlayWindow = new BrowserWindow({ width: 125, height: 45, frame: false, webPreferences: { webSecurity: false }, show: false })
 
     var positioner = new Positioner(overlayWindow)
     positioner.move('bottomRight')
@@ -95,6 +95,10 @@ function createOverlayWindow() {
     overlayWindow.setAlwaysOnTop(true, "floating")
     overlayWindow.setResizable(false)
     overlayWindow.setSkipTaskbar(true);
+
+    overlayWindow.once('ready-to-show', () => {
+        overlayWindow.show()
+    })
 
     if(isDevelopment) {
         overlayWindow.loadURL(`http://localhost:${process.env.ELECTRON_WEBPACK_WDS_PORT}#overlay`);
@@ -115,10 +119,14 @@ function createOverlayWindow() {
 }
 
 function createAboutWindow() {
-    aboutWindow = new BrowserWindow({ width: 470, height: 280, webPreferences: { webSecurity: false } })
+    aboutWindow = new BrowserWindow({ width: 470, height: 280, webPreferences: { webSecurity: false }, show: false })
 
     aboutWindow.setMenu(null)
     aboutWindow.setIcon(path.join(__static, 'tomato.ico'))
+
+    aboutWindow.once('ready-to-show', () => {
+        aboutWindow.show()
+    })
 
     if(isDevelopment) {
         aboutWindow.loadURL(`http://localhost:${process.env.ELECTRON_WEBPACK_WDS_PORT}#about`);
@@ -143,10 +151,14 @@ function createAboutWindow() {
 }
 
 function createSettingsWindow() {
-    settingsWindow = new BrowserWindow({ width: 500, height: 400, webPreferences: { webSecurity: false } })
+    settingsWindow = new BrowserWindow({ width: 500, height: 400, webPreferences: { webSecurity: false }, show: false })
 
     settingsWindow.setMenu(null)
     settingsWindow.setIcon(path.join(__static, 'tomato.ico'))
+
+    settingsWindow.once('ready-to-show', () => {
+        settingsWindow.show()
+    })
 
     const loadUrlFunction = function() {
         if(isDevelopment) {
@@ -181,12 +193,16 @@ function createSettingsWindow() {
 }
 
 function createNotesBeforeWindow() {
-    notesBeforeWindow = new BrowserWindow({ width: 500, height: 200, webPreferences: { webSecurity: false } })
+    notesBeforeWindow = new BrowserWindow({ width: 500, height: 200, webPreferences: { webSecurity: false }, show: false })
 
     notesBeforeWindow.setMenu(null)
     notesBeforeWindow.setIcon(path.join(__static, 'tomato.ico'))
     notesBeforeWindow.setAlwaysOnTop(true, "floating")
     notesBeforeWindow.setTitle("Pomodoro Goals")
+
+    notesBeforeWindow.once('ready-to-show', () => {
+        notesBeforeWindow.show()
+    })
 
     if(isDevelopment) {
         notesBeforeWindow.loadURL(`http://localhost:${process.env.ELECTRON_WEBPACK_WDS_PORT}#notes-before`)
