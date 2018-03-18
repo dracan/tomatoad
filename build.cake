@@ -144,7 +144,7 @@ Task("SendTweet")
         var oAuthConsumerSecret = EnvironmentVariable("TomatoadTwitterConsumerSecret");
         var accessToken = EnvironmentVariable("TomatoadTwitterAccessToken");
         var accessTokenSecret = EnvironmentVariable("TomatoadTwitterAccessTokenSecret");
-        var tweetContent = $"Version {semVersion} of Tomatoad has now been released and is available from either the Github release page, or via @chocolateynuget using 'cinst tomatoad' https://github.com/dracan/tomatoad/releases/tag/{semVersion}";
+        var tweetContent = $"Version {semVersion} of Tomatoad has now been released and is available from either the Github release page, or via @chocolateynuget using 'cinst tomatoad' https://github.com/dracan/tomatoad/releases/tag/{semVersion} #PomodoroTechnique";
 
         TwitterSendTweet(oAuthConsumerKey, oAuthConsumerSecret, accessToken, accessTokenSecret, tweetContent);
     });
