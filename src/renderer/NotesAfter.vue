@@ -28,6 +28,12 @@
                             :rows="3"
                             :max-rows="6">
                         </b-form-textarea>
+                        <b-form-textarea
+                            v-model="textAfter"
+                            placeholder="Enter notes about this Pomodoro"
+                            :rows="3"
+                            :max-rows="6">
+                        </b-form-textarea>
                     </b-form-group>
                 </div>
             </div>
@@ -68,6 +74,7 @@
 
     const data = {
         textBefore: "(none entered)",
+        textAfter: "",
         goalRating: 0,
         focusRating: 0,
     }
