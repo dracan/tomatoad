@@ -6,6 +6,7 @@
 #addin "nuget:?package=MagicChunks"
 #tool "nuget:?package=gitreleasemanager"
 #addin "Cake.Figlet"
+#addin Cake.Twitter
 
 var target = Argument("target", "Default");
 var configuration = Argument("configuration", "Release");
@@ -135,8 +136,21 @@ Task("Publish")
     .Does(() => {
     });
 
-Task("Default")
+Task("SendTweet")
+    .IsDependentOn("CalculateVersionNumber")
     .IsDependentOn("Publish")
+    .Does(() => {
+        var oAuthConsumerKey = EnvironmentVariable("TomatoadTwitterConsumerKey");
+        var oAuthConsumerSecret = EnvironmentVariable("TomatoadTwitterConsumerSecret");
+        var accessToken = EnvironmentVariable("TomatoadTwitterAccessToken");
+        var accessTokenSecret = EnvironmentVariable("TomatoadTwitterAccessTokenSecret");
+        var tweetContent = $"Version {semVersion} of Tomatoad has now been released and is available from either the Github release page, or via @chocolateynuget using 'cinst tomatoad' https://github.com/dracan/tomatoad/releases/tag/{semVersion}";
+
+        TwitterSendTweet(oAuthConsumerKey, oAuthConsumerSecret, accessToken, accessTokenSecret, tweetContent);
+    });
+
+Task("Default")
+    .IsDependentOn("SendTweet")
     .Does(() => {
         Information(Figlet("Success"));
     });
